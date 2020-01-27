@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "TestRunner", targets: ["TestRunner"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mxcl/Version.git", from: "2.0.0"),
+        .package(url: "https://github.com/mxcl/Version.git", from: "1.2.0"),
     ],
     targets: [
         .target(name: "xcutils", dependencies: ["TestRunner", "CLIHelpers"]),
