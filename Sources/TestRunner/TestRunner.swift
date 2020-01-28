@@ -102,12 +102,7 @@ public final class TestRunner {
             "test",
         ])
         
-        do {
-            try runOutputToStandardOutput(command)
-        } catch {
-            printError(error)
-            exit(1)
-        }
+        try runOutputToStandardOutput(command)
     }
     
 }
