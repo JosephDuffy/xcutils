@@ -5,6 +5,7 @@ public struct Simulator: Codable {
     public enum State: String, Codable {
         case shutdown = "Shutdown"
         case booted = "Booted"
+        case creating = "Creating"
     }
     
     public let state: State
