@@ -4,6 +4,7 @@ import func CLIHelpers.printError
 import func Foundation.exit
 import class Foundation.JSONDecoder
 import struct Version.Version
+import enum Version.DecodingMethod
 import class Foundation.UserDefaults
 
 public final class TestRunner {
@@ -38,6 +39,7 @@ public final class TestRunner {
             destination = "platform=macOS"
         default:
             let decoder = JSONDecoder()
+            decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
 
             let runtimesData = try run("xcrun", "simctl", "list", "runtimes", "--json")
             let decoded = try decoder.decode(RuntimesOutput.self, from: runtimesData)
