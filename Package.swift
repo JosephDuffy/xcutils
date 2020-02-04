@@ -7,15 +7,21 @@ let package = Package(
     products: [
         .executable(name: "xcutils", targets: ["xcutils"]),
         .library(name: "TestRunner", targets: ["TestRunner"]),
+        .library(name: "XcodeSelect", targets: ["XcodeSelect"]),
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/Version.git", from: "1.2.0"),
     ],
     targets: [
-        .target(name: "xcutils", dependencies: ["TestRunner", "CLIHelpers"]),
+        .target(name: "xcutils", dependencies: ["TestRunner", "XcodeSelect", "CLIHelpers"]),
         .testTarget(name: "xcutilsTests", dependencies: ["xcutils"]),
+
         .target(name: "TestRunner", dependencies: ["Version", "CLIHelpers"]),
         .testTarget(name: "TestRunnerTests", dependencies: ["TestRunner"]),
+
+        .target(name: "XcodeSelect", dependencies: ["Version", "CLIHelpers"]),
+        .testTarget(name: "XcodeSelectTests", dependencies: ["XcodeSelect"]),
+
         .target(name: "CLIHelpers"),
         .testTarget(name: "CLIHelpersTests", dependencies: ["CLIHelpers"]),
     ]
