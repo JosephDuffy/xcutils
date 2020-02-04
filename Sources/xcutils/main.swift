@@ -4,7 +4,7 @@ import func Foundation.exit
 import struct CLIHelpers.CommandError
 
 guard CommandLine.arguments.count > 1 else {
-    printError("At least 1 argument is required")
+    printError("A subcommand is required")
     exit(1)
 }
 
