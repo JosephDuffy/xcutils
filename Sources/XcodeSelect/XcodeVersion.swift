@@ -13,7 +13,9 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
     
     public let version: Version
     public let build: String
-    public let isBeta: Bool
+    public var isBeta: Bool {
+        return version.prereleaseIdentifiers.contains("beta")
+    }
     
     public var description: String {
         return "Xcode\(isBeta ? " Beta" : "") \(version) (\(build))"
@@ -32,18 +34,28 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
             var format = PropertyListSerialization.PropertyListFormat.binary
             let infoPlist = try decoder.decode(XcodeInfoPlist.self, from: infoPlistData, format: &format)
             let versionPlist = try decoder.decode(XcodeVersionPlist.self, from: versionPlistData, format: &format)
-            version = versionPlist.version
+
+            if infoPlist.iconFileName.hasSuffix("Beta") {
+                version = Version(
+                    major: versionPlist.version.major,
+                    minor: versionPlist.version.minor,
+                    patch: versionPlist.version.patch,
+                    prereleaseIdentifiers: versionPlist.version.prereleaseIdentifiers + ["beta"],
+                    buildMetadataIdentifiers: versionPlist.version.buildMetadataIdentifiers
+                )
+            } else {
+                version = versionPlist.version
+            }
+
             build = versionPlist.build
-            isBeta = infoPlist.iconFileName.hasSuffix("Beta")
         } catch {
             return nil
         }
     }
 
-    public init(version: Version, build: String, isBeta: Bool) {
+    public init(version: Version, build: String) {
         self.version = version
         self.build = build
-        self.isBeta = isBeta
     }
     
 }
