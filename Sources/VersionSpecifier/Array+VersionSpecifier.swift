@@ -28,7 +28,7 @@ extension Array where Element == Version {
             let lastMinor = latest.minor - 1
             return filter { $0.major == latest.major && $0.minor == lastMinor }.findVersion(matching: .latest)
         case .beta:
-            return betaReleases().findVersion(matching: .latest)
+            return betaReleases().sorted(by: >).first
         case .exact(let version):
             return first(where: { $0 == version })
         case .major(let major):
