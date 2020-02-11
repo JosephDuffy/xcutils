@@ -17,19 +17,41 @@ All flags can be passed as either `--flagName` or `-flagName`, although short na
 `xcutils test` makes running tests against simulators and the local Mac more concistent and easy:
 
 ```shell
-swift run xcutils test --platform iOS --scheme MyFramework --project MyFramework.xcodeproj
+swift run xcutils test iOS --project MyFramework.xcodeproj --scheme MyFramework
 ```
 
 This will test the `MyFramework` scheme from the `MyFramework.xcodeproj` project using an iOS simulator with the newest version of iOS installed, prioritising simulators that are already running.
 
 ##### Configuration
 
-| Flag | Required | Type | Default Value | Description |
+Usage: `xcutils test <platform> [options]`
+
+| Argument | Required | Type | Default Value | Description |
 |------|----------|------|---------------|-------------|
 | `platform` | Yes | `iOS` \| `macOS` \| `tvOS`| N/A | The platform to test on. |
-| `project` | Yes | `String` | N/A | The path to the project to test. |
-| `scheme` | Yes | `String` | N/A | The name of the scheme to test. |
-| `version` | No | `String` | `latest` | See [version specifiers](#version-specifiers). |
+| `--project`, `-p` | Yes | `String` | N/A | The path to the project to test. |
+| `--scheme`, `-s` | Yes | `String` | N/A | The name of the scheme to test. |
+| `--version`, `-v` | No | `String` | `latest` | See [version specifiers](#version-specifiers). |
+
+#### `xcutils select`
+
+`xcutils select` makes finding and changing the changing the Xcode version used by the command line easy:
+
+```shell
+swift run xcutils select latest
+```
+
+This will run `xcode-select` to select the latest version of Xcode installed in /Applications.
+
+##### Configuration
+
+Usage: `xcutils select [options] <version specifier>`
+
+| Argument | Required | Type | Default Value | Description |
+|------|----------|------|---------------|-------------|
+| `version` | Yes | `String` | `latest` | See [version specifiers](#version-specifiers). |
+| `--printVersions`, `-p` | No | `Bool` | `false` | Only print found version(s), sorted in version order. |
+| `--searchPath`, `-P` | No | `URL` | `/Applications` | The path to search for Xcode versions. |
 
 ### Version Specifiers
 
