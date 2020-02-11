@@ -15,7 +15,7 @@ struct SelectOptions {
 public class SelectCommand {
 
     public static func run(args: [String]) throws {
-        let parser = ArgumentParser(commandName: "select", usage: "[options] <version specifier>", overview: "Find and select Xcode versions")
+        let parser = ArgumentParser(commandName: "xcutils select", usage: "[options] <version specifier>", overview: "Find and select Xcode versions")
 
         let binder = ArgumentBinder<SelectOptions>()
 

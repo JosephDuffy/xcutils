@@ -8,7 +8,7 @@ import class TestRunner.TestRunner
 public class TestCommand {
 
     public static func run(args: [String]) throws {
-        let parser = ArgumentParser(commandName: "test", usage: "<platform> [options]", overview: "Find and select Xcode versions")
+        let parser = ArgumentParser(commandName: "xcutils test", usage: "<platform> [options]", overview: "Find and select Xcode versions")
 
         let binder = ArgumentBinder<TestOptions>()
 
@@ -23,7 +23,7 @@ public class TestCommand {
         )
 
         binder.bind(
-            option: parser.add(option: "--project", shortName: "-P", kind: PathArgument.self, usage: "The path to the Xcode Project"),
+            option: parser.add(option: "--project", shortName: "-p", kind: PathArgument.self, usage: "The path to the Xcode Project"),
             to: { $0.projectPath = $1.path }
         )
 
