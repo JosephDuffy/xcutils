@@ -4,9 +4,8 @@ import struct XcodeSelect.XcodeVersionPlist
 import struct XcodeSelect.XcodeVersion
 
 extension XcodeVersion {
-    internal func write(to url: URL) throws {
-        let appName = "Xcode_" + String(describing: version).replacingOccurrences(of: ".", with: "_") + ".app"
-        let contentsDirectory = url.appendingPathComponent(appName, isDirectory: true).appendingPathComponent("Contents", isDirectory: true)
+    internal func writeToPath() throws {
+        let contentsDirectory = path.appendingPathComponent("Contents", isDirectory: true)
         
         let infoPlistEncoder = PropertyListEncoder()
         infoPlistEncoder.outputFormat = .binary

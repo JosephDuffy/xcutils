@@ -10,7 +10,8 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
             return lhs.version < rhs.version
         }
     }
-    
+
+    public let path: URL
     public let version: Version
     public let build: String
     public var isBeta: Bool {
@@ -18,10 +19,12 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
     }
     
     public var description: String {
-        return "Xcode\(isBeta ? " Beta" : "") \(version) (\(build))"
+        return "Xcode \(version) (\(build)) at \(path.path)"
     }
     
     public init?(url: URL) {
+        path = url
+
         let decoder = PropertyListDecoder()
         decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
         let infoPlistURL = url.appendingPathComponent("Contents/Info.plist", isDirectory: false)
@@ -53,7 +56,8 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
         }
     }
 
-    public init(version: Version, build: String) {
+    public init(path: URL, version: Version, build: String) {
+        self.path = path
         self.version = version
         self.build = build
     }

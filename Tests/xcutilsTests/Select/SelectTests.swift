@@ -1,6 +1,7 @@
 import XCTest
 import Foundation
 import XcodeSelect
+import enum SelectCommand.SelectCommandError
 
 final class XcodeSelectHelperTests: XCTestCase {
 
@@ -9,7 +10,8 @@ final class XcodeSelectHelperTests: XCTestCase {
     }
     
     func testPrintVersionsWithASingleVersion() throws {
-        try XcodeVersion.v11_1_gm.write(to: mockXcodesDirectory)
+        let xcodeVersion = XcodeVersion.v11_1_gm(at: mockXcodesDirectory)
+        try xcodeVersion.writeToPath()
 
         let binary = productsDirectory.appendingPathComponent("xcutils")
 
@@ -30,7 +32,7 @@ final class XcodeSelectHelperTests: XCTestCase {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
 
-        XCTAssertEqual(output, "Xcode 11.1.0 (11A1024)\n")
+        XCTAssertEqual(output, "\(xcodeVersion.description)\n")
     }
 
     func testPrintVersionsWithNoVersions() throws {
@@ -57,7 +59,8 @@ final class XcodeSelectHelperTests: XCTestCase {
         let status = process.terminationStatus
 
         XCTAssertEqual(status, 1, "Should exit with error status 1")
-        XCTAssertEqual(standardError, "Failed to find any Xcode versions at \(mockXcodesDirectory.path)\n")
+        let error = SelectCommandError.foundNoVersions(path: mockXcodesDirectory)
+        XCTAssertEqual(standardError, "\(error)\n")
     }
 
     var productURL: URL {
