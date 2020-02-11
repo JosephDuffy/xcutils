@@ -24,6 +24,6 @@ do {
     printError(error.message)
     exit(error.exitCode)
 } catch {
-    printError(error)
+    printError(error.localizedDescription)
     exit(1)
 }
