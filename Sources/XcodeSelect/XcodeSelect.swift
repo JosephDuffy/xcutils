@@ -15,23 +15,22 @@ public final class XcodeSelect {
     public static func findVersion(matching specifier: VersionSpecifier, from directory: URL) throws -> XcodeVersion? {
         let xcodeVersions = try findVersions(in: directory)
 
-        guard let matchedVersion = xcodeVersions.map({ $0.version }).findVersion(matching: specifier) else {
-            return nil
-        }
-
-        return xcodeVersions.first(where: { $0.version == matchedVersion })!
+        return xcodeVersions.findElementWithVersion(matching: specifier, at: \.version)
     }
 
     public static func selectVersion(_ version: XcodeVersion) throws {
+        guard ProcessInfo.processInfo.environment["USER"] == "root" else {
+            // TODO: Fallback to running command with `sudo` and pipe stdin
+            throw SelectVersionError.requiresRoot
+        }
+
         let command: [String] = [
-            "sudo",
-            "xcodeselect",
+            "xcode-select",
             "--switch",
-            version.path.absoluteString,
+            version.path.path,
         ]
 
         try runOutputToStandardOutput(command)
-
     }
 
     public static func selectVersion(specifier: VersionSpecifier, from directory: URL) throws {
@@ -42,15 +41,4 @@ public final class XcodeSelect {
         try selectVersion(matchedVersion)
     }
     
-}
-
-public enum SelectVersionError: Error, LocalizedError {
-    case noVersionMatchingSpecifier(VersionSpecifier)
-
-    public var errorDescription: String? {
-        switch self {
-        case .noVersionMatchingSpecifier(let versionSpecifier):
-            return "No version found matching \(versionSpecifier)"
-        }
-    }
 }
