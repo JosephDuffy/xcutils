@@ -6,36 +6,16 @@ import class Foundation.JSONDecoder
 import struct Version.Version
 import enum Version.DecodingMethod
 import class Foundation.UserDefaults
+import enum VersionSpecifier.VersionSpecifier
+import struct Foundation.URL
 
 public final class TestRunner {
     
-    public static func runTests(userDefaults: UserDefaults = .standard) throws {
-        guard let platformString = CommandLineArguments.platform.stringValue() else {
-            printError("platform argument is required")
-            exit(1)
-        }
-        guard let scheme = CommandLineArguments.scheme.stringValue() else {
-            printError("scheme argument is required")
-            exit(1)
-        }
-
-        let versionString = CommandLineArguments.version.stringValue() ?? "latest"
-        
-        guard let platform = Platform(name: platformString, version: versionString) else {
-            printError("Invalid version string", versionString)
-            exit(1)
-        }
-        
-        let project = CommandLineArguments.project.stringValue()
-        
-        try runTests(platform: platform, scheme: scheme, project: project)
-    }
-    
-    public static func runTests(platform: Platform, scheme: String, project: String? = nil) throws {
+    public static func runTests(platform: Platform, versionSpecifier: VersionSpecifier, project: URL, scheme: String) throws {
         let destination: String
         
-        switch platform.name.lowercased() {
-        case "macos":
+        switch platform {
+        case .macOS:
             destination = "platform=macOS"
         default:
             let decoder = JSONDecoder()
@@ -45,25 +25,16 @@ public final class TestRunner {
             let decoded = try decoder.decode(RuntimesOutput.self, from: runtimesData)
             let runtimes = decoded.runtimes
 
-            let supportedRuntimes = runtimes.filter { $0.name.lowercased().contains(platform.name.lowercased()) }
+            let supportedRuntimes = runtimes.filter { $0.name.lowercased().contains(platform.rawValue.lowercased()) }
 
             guard !supportedRuntimes.isEmpty else {
                 printError("Found no runtimes for platform: \(platform)")
                 exit(1)
             }
-            
-            let runtime: Runtime
 
-            switch platform.version {
-            case .latest:
-                runtime = supportedRuntimes.sorted(by: { $0.version > $1.version }).first!
-            case .specific(let version):
-                if let foundVersion = supportedRuntimes.first(where: { $0.version == version }) {
-                    runtime = foundVersion
-                } else {
-                    printError("Failed to find runtime with version", version)
-                    exit(1)
-                }
+            guard let runtime = supportedRuntimes.findElementWithVersion(matching: versionSpecifier, at: \.version) else {
+                printError("Failed to find runtime for version", versionSpecifier)
+                exit(1)
             }
             
             let devicesData = try run("xcrun", "simctl", "list", "devices", "--json")
@@ -86,25 +57,17 @@ public final class TestRunner {
             destination = "id=\(simulator.udid.uuidString)"
         }
 
-        var command: [String] = [
+        let command: [String] = [
             "xcodebuild",
+            "build",
+            "test",
+            "-project",
+            project.path,
             "-scheme",
             scheme,
             "-destination",
             destination,
         ]
-        
-        if let project = project {
-            command.append(contentsOf: [
-                "-project",
-                project,
-            ])
-        }
-        
-        command.append(contentsOf: [
-            "build",
-            "test",
-        ])
         
         try runOutputToStandardOutput(command)
     }

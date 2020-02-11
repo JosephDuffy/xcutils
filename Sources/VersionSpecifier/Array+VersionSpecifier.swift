@@ -1,5 +1,18 @@
 import struct Version.Version
 
+extension Array {
+
+    /**
+     This assumes that versions are not repeated in a given array. Add `firstIndex(of:)` for the matching version could
+     improve this.
+     */
+    public func findElementWithVersion(matching specifier: VersionSpecifier, at keyPath: KeyPath<Element, Version>) -> Element? {
+        guard let version = map({ $0[keyPath: keyPath] }).findVersion(matching: specifier) else { return nil }
+        return first(where: { $0[keyPath: keyPath] == version })
+    }
+
+}
+
 extension Array where Element == Version {
 
     public func findVersion(matching specifier: VersionSpecifier) -> Version? {

@@ -15,8 +15,11 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.0.1"),
     ],
     targets: [
-        .target(name: "xcutils", dependencies: ["SwiftToolsSupport", "TestRunner", "SelectCommand", "CLIHelpers"]),
+        .target(name: "xcutils", dependencies: ["SwiftToolsSupport", "TestCommand", "SelectCommand", "CLIHelpers"]),
         .testTarget(name: "xcutilsTests", dependencies: ["xcutils"]),
+
+        .target(name: "TestCommand", dependencies: ["TestRunner", "SwiftToolsSupport"]),
+        .testTarget(name: "TestCommandTests", dependencies: ["TestCommand"]),
 
         .target(name: "TestRunner", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
         .testTarget(name: "TestRunnerTests", dependencies: ["TestRunner"]),

@@ -1,28 +1,18 @@
-import struct Version.Version
+public enum Platform: String, CaseIterable {
 
-public typealias SemanticVersion = Version
+    case macOS
 
-public struct Platform {
-    
-    public enum Version {
-        case latest
-        case specific(SemanticVersion)
-    }
-    
-    public let name: String
-    
-    public let version: Version
-    
-    public init?(name: String, version: String) {
-        self.name = name
-        
-        if version == "latest" {
-            self.version = .latest
-        } else if let version = SemanticVersion(tolerant: version) {
-            self.version = .specific(version)
-        } else {
-            return nil
+    case iOS
+
+    case tvOS
+
+    public init?(string: String) {
+        for platform in Platform.allCases where string.lowercased() == platform.rawValue.lowercased() {
+            self = platform
+            return
         }
+
+        return nil
     }
     
 }

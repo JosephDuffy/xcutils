@@ -1,8 +1,7 @@
 import func CLIHelpers.printError
-import class TestRunner.TestRunner
 import func Foundation.exit
 import struct CLIHelpers.CommandError
-import struct Foundation.URL
+import class TestCommand.TestCommand
 import class SelectCommand.SelectCommand
 
 guard CommandLine.arguments.count > 1 else {
@@ -15,7 +14,7 @@ let subCommand = CommandLine.arguments[1]
 do {
     switch subCommand {
     case "test":
-        try TestRunner.runTests()
+        try TestCommand.run(args: Array(CommandLine.arguments.dropFirst(2)))
     case "select":
         try SelectCommand.run(args: Array(CommandLine.arguments.dropFirst(2)))
     default:
