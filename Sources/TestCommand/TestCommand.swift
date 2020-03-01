@@ -1,56 +1,35 @@
-import class TSCUtility.ArgumentParser
-import class TSCUtility.ArgumentBinder
-import struct TSCUtility.PathArgument
 import enum VersionSpecifier.VersionSpecifier
 import enum TestRunner.Platform
 import class TestRunner.TestRunner
+import ArgumentParser
+import Foundation
 
-public class TestCommand {
+public struct TestCommand: ParsableCommand {
 
-    public static func run(args: [String]) throws {
-        let parser = ArgumentParser(commandName: "xcutils test", usage: "<platform> [options]", overview: "Find and select Xcode versions")
+    public static var configuration = CommandConfiguration(
+        commandName: "test",
+        abstract: "Test macOS, iOS, and tvOS targets against simulators."
+    )
 
-        let binder = ArgumentBinder<TestOptions>()
+    @Argument()
+    var platform: Platform
 
-        binder.bind(
-            positional: parser.add(positional: "platform", kind: Platform.self, optional: false, usage: "The platform to test"),
-            to: { $0.platform = $1 }
-        )
+    @Option(name: [.short, .customLong("version")], default: .latest)
+    var versionSpecifier: VersionSpecifier
 
-        binder.bind(
-            option: parser.add(option: "--version", shortName: "-v", kind: VersionSpecifier.self, usage: "The platform version to test. Defaults to latest"),
-            to: { $0.versionSpecifier = $1 }
-        )
+    @Option(default: "/Applications")
+    var project: String
 
-        binder.bind(
-            option: parser.add(option: "--project", shortName: "-p", kind: PathArgument.self, usage: "The path to the Xcode Project"),
-            to: { $0.projectPath = $1.path }
-        )
+    @Option()
+    var scheme: String
 
-        binder.bind(
-            option: parser.add(option: "--scheme", shortName: "-s", kind: String.self, usage: "The scheme to test"),
-            to: { $0.scheme = $1 }
-        )
+    public init() {}
 
-        let result = try parser.parse(args)
-
-        var options = TestOptions()
-        try binder.fill(parseResult: result, into: &options)
-
-        guard let projectPath = options.projectPath else {
-            // TODO: Try to find project in local directory
-            throw TestCommandError.projectRequired
-        }
-
-        guard let scheme = options.scheme else {
-            // TODO: Try to find schemes in project
-            throw TestCommandError.schemeRequired
-        }
-
+    public func run() throws {
         try TestRunner.runTests(
-            platform: options.platform!,
-            versionSpecifier: options.versionSpecifier,
-            project: projectPath.asURL,
+            platform: platform,
+            versionSpecifier: versionSpecifier,
+            project: URL(fileURLWithPath: project, isDirectory: true),
             scheme: scheme
         )
     }

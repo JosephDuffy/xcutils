@@ -1,6 +1,7 @@
 import protocol Foundation.LocalizedError
 
-public enum TestCommandError: Swift.Error, LocalizedError {
+public enum TestCommandError: Swift.Error, LocalizedError, CustomStringConvertible {
+
     case schemeRequired
     case projectRequired
 
@@ -12,4 +13,9 @@ public enum TestCommandError: Swift.Error, LocalizedError {
             return "A project must be specified"
         }
     }
+
+    public var description: String {
+        return localizedDescription
+    }
+    
 }

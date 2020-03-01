@@ -1,6 +1,7 @@
 import struct Version.Version
+import ArgumentParser
 
-public enum VersionSpecifier: Equatable {
+public enum VersionSpecifier: RawRepresentable, ExpressibleByArgument, Equatable {
     
     /// The latest stable version
     case latest
@@ -20,8 +21,27 @@ public enum VersionSpecifier: Equatable {
     case major(Int)
 
     case majorMinor(_ major: Int, _ minor: Int)
+
+    public var rawValue: String {
+        switch self {
+        case .latest:
+            return "latest"
+        case .lastMajor:
+            return "last-major"
+        case .lastMinor:
+            return "last-minor"
+        case .beta:
+            return "beta"
+        case .exact(let version):
+            return String(describing: version)
+        case .major(let major):
+            return "\(major)"
+        case .majorMinor(let major, let minor):
+            return "\(major).\(minor)"
+        }
+    }
     
-    public init?(_ string: String) {
+    public init?(rawValue string: String) {
         switch string {
         case "latest":
             self = .latest

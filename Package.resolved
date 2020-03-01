@@ -2,11 +2,11 @@
   "object": {
     "pins": [
       {
-        "package": "swift-tools-support-core",
-        "repositoryURL": "https://github.com/apple/swift-tools-support-core.git",
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "693aba4c4c9dcc4767cc853a0dd38bf90ad8c258",
+          "revision": "f6ac7b8118ff5d1bc0faee7f37bf6f8fd8f95602",
           "version": "0.0.1"
         }
       },

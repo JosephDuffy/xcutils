@@ -12,28 +12,25 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/Version.git", from: "1.2.0"),
-        .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.0.1"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
     ],
     targets: [
-        .target(name: "xcutils", dependencies: ["SwiftToolsSupport", "TestCommand", "SelectCommand", "CLIHelpers"]),
-        .testTarget(name: "xcutilsTests", dependencies: ["xcutils"]),
+        .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
 
-        .target(name: "TestCommand", dependencies: ["TestRunner", "SwiftToolsSupport"]),
-        .testTarget(name: "TestCommandTests", dependencies: ["TestCommand"]),
+        .target(name: "XcutilsCommand", dependencies: ["ArgumentParser", "TestCommand", "SelectCommand"]),
+
+        .target(name: "TestCommand", dependencies: ["TestRunner", "ArgumentParser"]),
 
         .target(name: "TestRunner", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
-        .testTarget(name: "TestRunnerTests", dependencies: ["TestRunner"]),
 
-        .target(name: "SelectCommand", dependencies: ["XcodeSelect", "SwiftToolsSupport"]),
+        .target(name: "SelectCommand", dependencies: ["XcodeSelect", "ArgumentParser"]),
         .testTarget(name: "SelectCommandTests", dependencies: ["SelectCommand"]),
 
         .target(name: "XcodeSelect", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
-        .testTarget(name: "XcodeSelectTests", dependencies: ["XcodeSelect"]),
 
-        .target(name: "CLIHelpers", dependencies: ["SwiftToolsSupport"]),
-        .testTarget(name: "CLIHelpersTests", dependencies: ["CLIHelpers"]),
+        .target(name: "CLIHelpers", dependencies: ["ArgumentParser"]),
 
-        .target(name: "VersionSpecifier", dependencies: ["Version", "SwiftToolsSupport"]),
+        .target(name: "VersionSpecifier", dependencies: ["Version", "ArgumentParser"]),
         .testTarget(name: "VersionSpecifierTests", dependencies: ["VersionSpecifier"]),
     ]
 )

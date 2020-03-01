@@ -1,4 +1,6 @@
-public enum Platform: String, CaseIterable {
+import ArgumentParser
+
+public enum Platform: String, RawRepresentable, ExpressibleByArgument, CaseIterable {
 
     case macOS
 
@@ -6,7 +8,7 @@ public enum Platform: String, CaseIterable {
 
     case tvOS
 
-    public init?(string: String) {
+    public init?(rawValue string: String) {
         for platform in Platform.allCases where string.lowercased() == platform.rawValue.lowercased() {
             self = platform
             return
