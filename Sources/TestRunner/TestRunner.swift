@@ -1,5 +1,4 @@
 import func CLIHelpers.run
-import func CLIHelpers.runOutputToStandardOutput
 import func CLIHelpers.printError
 import func Foundation.exit
 import class Foundation.JSONDecoder
@@ -69,7 +68,7 @@ public final class TestRunner {
             destination,
         ]
         
-        try runOutputToStandardOutput(command)
+        try run(command)
     }
     
 }

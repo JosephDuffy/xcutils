@@ -16,37 +16,6 @@ public func run(_ command: String...) throws -> Data {
     return pipe.fileHandleForReading.readDataToEndOfFile()
 }
 
-public func runOutputToStandardOutput(_ command: [String]) throws {
-    let pipe = Pipe()
-    let handle = pipe.fileHandleForReading
-    
-    var dataAvailableObserver: NSObjectProtocol?
-    dataAvailableObserver = NotificationCenter.default.addObserver(
-        forName: .NSFileHandleDataAvailable,
-        object: handle,
-        queue: .main,
-        using: { _ in
-            let data = handle.availableData
-
-            if data.count > 0 {
-                if let string = String(data: data, encoding: .utf8) {
-                    print(string)
-                }
-                handle.waitForDataInBackgroundAndNotify()
-            } else if let dataAvailableObserver = dataAvailableObserver {
-                NotificationCenter.default.removeObserver(
-                    dataAvailableObserver,
-                    name: .NSFileHandleDataAvailable,
-                    object: handle
-                )
-            }
-    })
-    
-    handle.waitForDataInBackgroundAndNotify()
-    
-    try run(command, streamOutputTo: pipe)
-}
-
 public func run(_ command: [String], streamOutputTo outputPipe: Pipe? = nil) throws {
     let process = Process()
     process.launchPath = "/usr/bin/env"
@@ -58,7 +27,7 @@ public func run(_ command: [String], streamOutputTo outputPipe: Pipe? = nil) thr
 
     try process.run()
     process.waitUntilExit()
-    
+
     if process.terminationStatus != 0 {
         let errorData = standardError.fileHandleForReading.readDataToEndOfFile()
         let error = String(data: errorData, encoding: .utf8)!

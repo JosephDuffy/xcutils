@@ -1,6 +1,6 @@
 import Foundation
 import enum VersionSpecifier.VersionSpecifier
-import func CLIHelpers.runOutputToStandardOutput
+import func CLIHelpers.run
 
 public final class XcodeSelect {
     
@@ -30,7 +30,7 @@ public final class XcodeSelect {
             version.path.path,
         ]
 
-        try runOutputToStandardOutput(command)
+        try run(command)
     }
 
     public static func selectVersion(specifier: VersionSpecifier, from directory: URL) throws {
