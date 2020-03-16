@@ -5,7 +5,7 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
     
     public static func < (lhs: XcodeVersion, rhs: XcodeVersion) -> Bool {
         if lhs.version == rhs.version {
-            return lhs.isBeta && !rhs.isBeta
+            return lhs.isBeta && !rhs.isBeta || lhs.bundleVersion < rhs.bundleVersion
         } else {
             return lhs.version < rhs.version
         }
@@ -13,6 +13,7 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
 
     public let path: URL
     public let version: Version
+    public let bundleVersion: Float
     public let build: String
     public var isBeta: Bool {
         return version.prereleaseIdentifiers.contains("beta")
@@ -50,15 +51,17 @@ public struct XcodeVersion: Comparable, CustomStringConvertible {
                 version = versionPlist.version
             }
 
+            bundleVersion = versionPlist.bundleVersion
             build = versionPlist.build
         } catch {
             return nil
         }
     }
 
-    public init(path: URL, version: Version, build: String) {
+    public init(path: URL, version: Version, bundleVersion: Float, build: String) {
         self.path = path
         self.version = version
+        self.bundleVersion = bundleVersion
         self.build = build
     }
     

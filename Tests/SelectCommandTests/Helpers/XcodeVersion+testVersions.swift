@@ -10,6 +10,7 @@ extension XcodeVersion {
         return XcodeVersion(
             path: path.appendingPathComponent(appName, isDirectory: true),
             version: version,
+            bundleVersion: 12345.1,
             build: "11A1024"
         )
     }

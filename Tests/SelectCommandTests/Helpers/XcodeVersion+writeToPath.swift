@@ -14,7 +14,7 @@ extension XcodeVersion {
         let infoPlistURL = contentsDirectory.appendingPathComponent("Info.plist", isDirectory: false)
         
         let versionPlistEncoder = PropertyListEncoder()
-        let versionPlist = XcodeVersionPlist(version: version, build: build)
+        let versionPlist = XcodeVersionPlist(version: version, bundleVersion: 12345.1, build: build)
         let versionPlistData = try versionPlistEncoder.encode(versionPlist)
         let versionPlistURL = contentsDirectory.appendingPathComponent("version.plist", isDirectory: false)
         
