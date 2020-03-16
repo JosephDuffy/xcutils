@@ -11,7 +11,7 @@ public enum SelectVersionError: Error, LocalizedError, CustomStringConvertible {
         case .noVersionMatchingSpecifier(let versionSpecifier):
             return "No version found matching \(versionSpecifier)"
         case .requiresRoot:
-            return "This command must be run as root"
+            return "The select subcommand must be run as root: `sudo xcutils select <version-specifier>"
         }
     }
 

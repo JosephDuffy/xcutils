@@ -20,7 +20,6 @@ public final class XcodeSelect {
 
     public static func selectVersion(_ version: XcodeVersion) throws {
         guard ProcessInfo.processInfo.environment["USER"] == "root" else {
-            // TODO: Fallback to running command with `sudo` and pipe stdin
             throw SelectVersionError.requiresRoot
         }
 
