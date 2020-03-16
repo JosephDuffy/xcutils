@@ -13,7 +13,7 @@ public struct SelectCommand: ParsableCommand {
     @Argument()
     var versionSpecifier: VersionSpecifier?
 
-    @Flag()
+    @Flag(help: "Only print found versions; do not switch")
     var printVersions: Bool
 
     @Option(default: "/Applications")
