@@ -9,8 +9,16 @@ import enum VersionSpecifier.VersionSpecifier
 import struct Foundation.URL
 
 public final class TestRunner {
-    
-    public static func runTests(platform: Platform, versionSpecifier: VersionSpecifier, project: URL, scheme: String) throws {
+
+    /**
+     Run tests using `xcodebuild`.
+
+     - parameter platform: The platform to test.
+     - parameter versionSpecifier: The version of the platform to test.
+     - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
+     - parameter scheme: The scheme to test. For swift packages this is the target.
+     */
+    public static func runTests(platform: Platform, versionSpecifier: VersionSpecifier, project: URL?, scheme: String) throws {
         let destination: String
         
         switch platform {
@@ -56,17 +64,20 @@ public final class TestRunner {
             destination = "id=\(simulator.udid.uuidString)"
         }
 
-        let command: [String] = [
+        var command: [String] = [
             "xcodebuild",
             "build",
             "test",
-            "-project",
-            project.path,
             "-scheme",
             scheme,
             "-destination",
             destination,
         ]
+
+        project.map { project in
+            command.append("-project")
+            command.append(project.path)
+        }
         
         try run(command)
     }

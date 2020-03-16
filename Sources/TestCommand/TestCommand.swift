@@ -17,8 +17,8 @@ public struct TestCommand: ParsableCommand {
     @Option(name: [.short, .customLong("version")], default: .latest)
     var versionSpecifier: VersionSpecifier
 
-    @Option(default: "/Applications")
-    var project: String
+    @Option()
+    var project: String?
 
     @Option()
     var scheme: String
@@ -29,7 +29,7 @@ public struct TestCommand: ParsableCommand {
         try TestRunner.runTests(
             platform: platform,
             versionSpecifier: versionSpecifier,
-            project: URL(fileURLWithPath: project, isDirectory: true),
+            project: project.map { URL(fileURLWithPath: $0, isDirectory: false) },
             scheme: scheme
         )
     }
