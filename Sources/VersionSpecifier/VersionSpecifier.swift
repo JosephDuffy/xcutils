@@ -54,16 +54,19 @@ public enum VersionSpecifier: RawRepresentable, ExpressibleByArgument, Equatable
         default:
             guard let version = Version(tolerant: string) else { return nil }
 
-            let prereleaseStartIndex = string.firstIndex(of: "-")
-            let metadataStartIndex = string.firstIndex(of: "+")
-            let requiredEndIndex = prereleaseStartIndex ?? metadataStartIndex ?? string.endIndex
-            let requiredCharacters = string.prefix(upTo: requiredEndIndex)
-            let splits = requiredCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false)
+            guard version.prereleaseIdentifiers.isEmpty && version.buildMetadataIdentifiers.isEmpty else {
+                self = .exact(version)
+                return
+            }
 
-            switch splits.count {
-            case 1:
+            let numberOfPeriods = string.reduce(0) { count, character in
+                return character == "." ? count + 1 : count
+            }
+
+            switch numberOfPeriods {
+            case 0:
                 self = .major(version.major)
-            case 2:
+            case 1:
                 self = .majorMinor(version.major, version.minor)
             default:
                 self = .exact(version)
