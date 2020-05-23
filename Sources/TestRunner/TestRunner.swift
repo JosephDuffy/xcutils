@@ -84,7 +84,6 @@ public final class TestRunner {
 
         var command: [String] = [
             "xcodebuild",
-            "build",
             "test",
             "-scheme",
             scheme,
