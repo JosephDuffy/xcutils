@@ -32,7 +32,7 @@ public struct TestCommand: ParsableCommand {
         try TestRunner.runTests(
             platform: platform,
             versionSpecifier: versionSpecifier,
-            project: project.map { URL(fileURLWithPath: $0, isDirectory: false) },
+            project: project.map { URL(fileURLWithPath: $0, isDirectory: true) },
             scheme: scheme,
             enableVerboseLogging: globalOptions.verbose
         )
