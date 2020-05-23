@@ -8,6 +8,8 @@ public enum Platform: String, RawRepresentable, ExpressibleByArgument, CaseItera
 
     case tvOS
 
+    case watchOS
+
     public init?(rawValue string: String) {
         for platform in Platform.allCases where string.lowercased() == platform.rawValue.lowercased() {
             self = platform

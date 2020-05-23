@@ -17,11 +17,15 @@ let package = Package(
     targets: [
         .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
 
-        .target(name: "XcutilsCommand", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"), "TestCommand", "SelectCommand"]),
+        .target(name: "XcutilsCommand", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"), "BuildCommand", "TestCommand", "SelectCommand"]),
 
         .target(name: "TestCommand", dependencies: ["TestRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
         .target(name: "TestRunner", dependencies: ["Models", "Version", "VersionSpecifier", "SimulatorControl", "CLIHelpers"]),
+
+        .target(name: "BuildCommand", dependencies: ["BuildRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
+
+        .target(name: "BuildRunner", dependencies: ["Models", "Version", "VersionSpecifier", "SimulatorControl", "CLIHelpers"]),
 
         .target(
             name: "SelectCommand",
