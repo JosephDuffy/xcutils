@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.2
 import PackageDescription
 
 let package = Package(
@@ -17,20 +17,20 @@ let package = Package(
     targets: [
         .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
 
-        .target(name: "XcutilsCommand", dependencies: ["ArgumentParser", "TestCommand", "SelectCommand"]),
+        .target(name: "XcutilsCommand", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"), "TestCommand", "SelectCommand"]),
 
-        .target(name: "TestCommand", dependencies: ["TestRunner", "ArgumentParser"]),
+        .target(name: "TestCommand", dependencies: ["TestRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
         .target(name: "TestRunner", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
 
-        .target(name: "SelectCommand", dependencies: ["XcodeSelect", "ArgumentParser"]),
+        .target(name: "SelectCommand", dependencies: ["XcodeSelect", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
         .testTarget(name: "SelectCommandTests", dependencies: ["SelectCommand"]),
 
         .target(name: "XcodeSelect", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
 
-        .target(name: "CLIHelpers", dependencies: ["ArgumentParser"]),
+        .target(name: "CLIHelpers", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
-        .target(name: "VersionSpecifier", dependencies: ["Version", "ArgumentParser"]),
+        .target(name: "VersionSpecifier", dependencies: ["Version", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
         .testTarget(name: "VersionSpecifierTests", dependencies: ["VersionSpecifier"]),
     ]
 )
