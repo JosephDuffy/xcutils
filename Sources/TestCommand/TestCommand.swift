@@ -26,6 +26,9 @@ public struct TestCommand: ParsableCommand {
     @Option()
     var scheme: String
 
+    @Flag(inversion: .prefixedEnableDisable, help: "Explicitly enable or disable code coverage. If this flag is ommited the project's settings will be used")
+    var codeCoverage: Bool?
+
     @OptionGroup()
     var globalOptions: GlobalOptions
 
@@ -38,6 +41,7 @@ public struct TestCommand: ParsableCommand {
             project: project.map { URL(fileURLWithPath: $0, isDirectory: true) },
             workspace: workspace.map { URL(fileURLWithPath: $0, isDirectory: true) },
             scheme: scheme,
+            enableCodeCoverage: codeCoverage,
             enableVerboseLogging: globalOptions.verbose
         )
     }

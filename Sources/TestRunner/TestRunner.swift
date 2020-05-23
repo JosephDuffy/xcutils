@@ -25,6 +25,7 @@ public final class TestRunner {
         project: URL?,
         workspace: URL?,
         scheme: String,
+        enableCodeCoverage: Bool? = nil,
         enableVerboseLogging: Bool = false
     ) throws {
         let destination: String
@@ -99,6 +100,11 @@ public final class TestRunner {
         workspace.map { workspace in
             command.append("-workspace")
             command.append(workspace.path)
+        }
+
+        if let enableCodeCoverage = enableCodeCoverage {
+            command.append("-enableCodeCoverage")
+            command.append(enableCodeCoverage ? "YES" : "NO")
         }
         
         try run(enableVerboseLogging: enableVerboseLogging, command)
