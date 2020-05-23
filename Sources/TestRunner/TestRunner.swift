@@ -62,7 +62,7 @@ public final class TestRunner {
                 print("Using runtime:", runtime)
             }
             
-            let devicesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "devices", "--json")
+            let devicesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "devices", "available", "--json")
             let devices = try decoder.decode(DevicesOutput.self, from: devicesData)
             let simulators = devices.devices
 
@@ -71,14 +71,12 @@ public final class TestRunner {
                 exit(1)
             }
 
-            let availableSimulators = supportedSimulators.filter { $0.isAvailable }
-
-            guard !availableSimulators.isEmpty else {
+            guard !supportedSimulators.isEmpty else {
                 printError("All simulators for platform \(platform) are unavailable")
                 exit(1)
             }
 
-            let simulator = availableSimulators.first(where: { $0.state == .booted }) ?? availableSimulators.first!
+            let simulator = supportedSimulators.first(where: { $0.state == .booted }) ?? supportedSimulators.first!
             destination = "id=\(simulator.udid.uuidString)"
         }
 
