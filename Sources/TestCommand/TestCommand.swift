@@ -21,6 +21,9 @@ public struct TestCommand: ParsableCommand {
     var project: String?
 
     @Option()
+    var workspace: String?
+
+    @Option()
     var scheme: String
 
     @OptionGroup()
@@ -33,6 +36,7 @@ public struct TestCommand: ParsableCommand {
             platform: platform,
             versionSpecifier: versionSpecifier,
             project: project.map { URL(fileURLWithPath: $0, isDirectory: true) },
+            workspace: workspace.map { URL(fileURLWithPath: $0, isDirectory: true) },
             scheme: scheme,
             enableVerboseLogging: globalOptions.verbose
         )

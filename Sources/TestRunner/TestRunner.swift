@@ -16,12 +16,14 @@ public final class TestRunner {
      - parameter platform: The platform to test.
      - parameter versionSpecifier: The version of the platform to test.
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
+     - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.     
      - parameter scheme: The scheme to test. For swift packages this is the target.
      */
     public static func runTests(
         platform: Platform,
         versionSpecifier: VersionSpecifier,
         project: URL?,
+        workspace: URL?,
         scheme: String,
         enableVerboseLogging: Bool = false
     ) throws {
@@ -92,6 +94,11 @@ public final class TestRunner {
         project.map { project in
             command.append("-project")
             command.append(project.path)
+        }
+
+        workspace.map { workspace in
+            command.append("-workspace")
+            command.append(workspace.path)
         }
         
         try run(enableVerboseLogging: enableVerboseLogging, command)
