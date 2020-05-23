@@ -1,12 +1,9 @@
-import func CLIHelpers.run
-import func CLIHelpers.printError
-import func Foundation.exit
-import class Foundation.JSONDecoder
-import struct Version.Version
-import enum Version.DecodingMethod
-import class Foundation.UserDefaults
+import Foundation
+import Models
+import CLIHelpers
 import enum VersionSpecifier.VersionSpecifier
-import struct Foundation.URL
+import struct Version.Version
+import SimulatorControl
 
 public final class TestRunner {
 
@@ -34,16 +31,11 @@ public final class TestRunner {
         case .macOS:
             destination = "platform=macOS"
         default:
-            let decoder = JSONDecoder()
-            decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
-
             if enableVerboseLogging {
                 print("Getting available runtimes")
             }
 
-            let runtimesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "runtimes", "--json")
-            let decoded = try decoder.decode(RuntimesOutput.self, from: runtimesData)
-            let runtimes = decoded.runtimes
+            let runtimes = try SimulatorControl.listRuntimes(enableVerboseLogging: enableVerboseLogging)
 
             if enableVerboseLogging {
                 print("Available runtimes:", runtimes)
@@ -64,10 +56,8 @@ public final class TestRunner {
             if enableVerboseLogging {
                 print("Using runtime:", runtime)
             }
-            
-            let devicesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "devices", "available", "--json")
-            let devices = try decoder.decode(DevicesOutput.self, from: devicesData)
-            let simulators = devices.devices
+
+            let simulators = try SimulatorControl.listDevices(availableDevicesOnly: true, enableVerboseLogging: enableVerboseLogging)
 
             guard let supportedSimulators = simulators[runtime.identifier] else {
                 printError("Found no simulators for platform", platform)
@@ -107,7 +97,7 @@ public final class TestRunner {
             command.append(enableCodeCoverage ? "YES" : "NO")
         }
         
-        try run(enableVerboseLogging: enableVerboseLogging, command)
+        try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
     }
     
 }

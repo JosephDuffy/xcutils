@@ -29,7 +29,7 @@ public final class XcodeSelect {
             version.path.path,
         ]
 
-        try run(command)
+        try run(command, streamOutputTo: .standardOut)
     }
 
     public static func selectVersion(specifier: VersionSpecifier, from directory: URL) throws {

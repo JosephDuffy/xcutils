@@ -3,6 +3,7 @@ import TestRunner
 import ArgumentParser
 import Foundation
 import struct GlobalOptions.GlobalOptions
+import Models
 
 public struct TestCommand: ParsableCommand {
 

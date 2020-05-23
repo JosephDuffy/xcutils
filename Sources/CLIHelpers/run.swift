@@ -11,17 +11,31 @@ public struct CommandError: Error {
 }
 
 public func run(enableVerboseLogging: Bool = false, _ command: String...) throws -> Data {
+    return try run(enableVerboseLogging: enableVerboseLogging, command)
+}
+
+public func run(enableVerboseLogging: Bool = false, _ command: [String]) throws -> Data {
     let pipe = Pipe()
-    try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: pipe)
+    try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .pipe(pipe))
     return pipe.fileHandleForReading.readDataToEndOfFile()
 }
 
-public func run(enableVerboseLogging: Bool = false, _ command: [String], streamOutputTo outputPipe: Pipe? = nil) throws {
+public enum CommandOutput {
+    case standardOut
+    case pipe(Pipe)
+}
+
+public func run(enableVerboseLogging: Bool = false, _ command: [String], streamOutputTo output: CommandOutput) throws {
     let process = Process()
     process.launchPath = "/usr/bin/env"
     process.arguments = command
 
-    outputPipe.map { process.standardOutput = $0 }
+    switch output {
+    case .pipe(let pipe):
+        process.standardOutput = pipe
+    case .standardOut:
+        break
+    }
     let standardError = Pipe()
     process.standardError = standardError
 
