@@ -10,13 +10,13 @@ public struct CommandError: Error {
     public let exitCode: Int32
 }
 
-public func run(_ command: String...) throws -> Data {
+public func run(enableVerboseLogging: Bool = false, _ command: String...) throws -> Data {
     let pipe = Pipe()
-    try run(command, streamOutputTo: pipe)
+    try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: pipe)
     return pipe.fileHandleForReading.readDataToEndOfFile()
 }
 
-public func run(_ command: [String], streamOutputTo outputPipe: Pipe? = nil) throws {
+public func run(enableVerboseLogging: Bool = false, _ command: [String], streamOutputTo outputPipe: Pipe? = nil) throws {
     let process = Process()
     process.launchPath = "/usr/bin/env"
     process.arguments = command
@@ -24,6 +24,10 @@ public func run(_ command: [String], streamOutputTo outputPipe: Pipe? = nil) thr
     outputPipe.map { process.standardOutput = $0 }
     let standardError = Pipe()
     process.standardError = standardError
+
+    if enableVerboseLogging {
+        print("Running command", command.joined(separator: " "))
+    }
 
     try process.run()
     process.waitUntilExit()

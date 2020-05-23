@@ -18,7 +18,13 @@ public final class TestRunner {
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
      - parameter scheme: The scheme to test. For swift packages this is the target.
      */
-    public static func runTests(platform: Platform, versionSpecifier: VersionSpecifier, project: URL?, scheme: String) throws {
+    public static func runTests(
+        platform: Platform,
+        versionSpecifier: VersionSpecifier,
+        project: URL?,
+        scheme: String,
+        enableVerboseLogging: Bool = false
+    ) throws {
         let destination: String
         
         switch platform {
@@ -28,9 +34,17 @@ public final class TestRunner {
             let decoder = JSONDecoder()
             decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
 
-            let runtimesData = try run("xcrun", "simctl", "list", "runtimes", "--json")
+            if enableVerboseLogging {
+                print("Getting available runtimes")
+            }
+
+            let runtimesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "runtimes", "--json")
             let decoded = try decoder.decode(RuntimesOutput.self, from: runtimesData)
             let runtimes = decoded.runtimes
+
+            if enableVerboseLogging {
+                print("Available runtimes:", runtimes)
+            }
 
             let supportedRuntimes = runtimes.filter { $0.name.lowercased().contains(platform.rawValue.lowercased()) }
 
@@ -43,8 +57,12 @@ public final class TestRunner {
                 printError("Failed to find runtime for version", versionSpecifier)
                 exit(1)
             }
+
+            if enableVerboseLogging {
+                print("Using runtime:", runtime)
+            }
             
-            let devicesData = try run("xcrun", "simctl", "list", "devices", "--json")
+            let devicesData = try run(enableVerboseLogging: enableVerboseLogging, "xcrun", "simctl", "list", "devices", "--json")
             let devices = try decoder.decode(DevicesOutput.self, from: devicesData)
             let simulators = devices.devices
 
@@ -79,7 +97,7 @@ public final class TestRunner {
             command.append(project.path)
         }
         
-        try run(command)
+        try run(enableVerboseLogging: enableVerboseLogging, command)
     }
     
 }

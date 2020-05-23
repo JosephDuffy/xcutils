@@ -1,8 +1,8 @@
 import enum VersionSpecifier.VersionSpecifier
-import enum TestRunner.Platform
-import class TestRunner.TestRunner
+import TestRunner
 import ArgumentParser
 import Foundation
+import struct GlobalOptions.GlobalOptions
 
 public struct TestCommand: ParsableCommand {
 
@@ -23,6 +23,9 @@ public struct TestCommand: ParsableCommand {
     @Option()
     var scheme: String
 
+    @OptionGroup()
+    var globalOptions: GlobalOptions
+
     public init() {}
 
     public func run() throws {
@@ -30,7 +33,8 @@ public struct TestCommand: ParsableCommand {
             platform: platform,
             versionSpecifier: versionSpecifier,
             project: project.map { URL(fileURLWithPath: $0, isDirectory: false) },
-            scheme: scheme
+            scheme: scheme,
+            enableVerboseLogging: globalOptions.verbose
         )
     }
 
