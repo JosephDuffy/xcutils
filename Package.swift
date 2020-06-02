@@ -39,7 +39,7 @@ let package = Package(
 
         .target(name: "XcodeSelect", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
 
-        .target(name: "SimulatorControl", dependencies: ["CLIHelpers"]),
+        .target(name: "SimulatorControl", dependencies: ["CLIHelpers", "Models", "Version"]),
 
         .target(name: "GlobalOptions", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
