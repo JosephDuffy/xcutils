@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (75% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" />
+          Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/BuildCommand.html">BuildCommand</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='xcutils' class='heading'>xcutils</h1>
+
+<p>A collection of utilities that aid with the use of the Xcode CLI, packaged as a single SwiftPM Package.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+
+<p><code>xcutils</code> can be used as an executable, or you can include the provided frameworks to aid with your own workflow.</p>
+<h3 id='code-xcutils-code-executable' class='heading'><code>xcutils</code> Executable</h3>
+
+<p>The SwiftPM Package provides a single executable, <code>xcutils</code>, which contains subcommands for each of the utilities provided.</p>
+
+<p>All flags can be passed as either <code>--flagName</code> or <code>-flagName</code>, although short names must be in the format <code>-f</code>.</p>
+<h4 id='code-xcutils-test-code' class='heading'><code>xcutils test</code></h4>
+
+<p><code>xcutils test</code> makes running tests against simulators and the local Mac more concistent and easy:</p>
+<pre class="highlight shell"><code>swift run xcutils <span class="nb">test </span>iOS <span class="nt">--project</span> MyFramework.xcodeproj <span class="nt">--scheme</span> MyFramework
+</code></pre>
+
+<p>This will test the <code>MyFramework</code> scheme from the <code>MyFramework.xcodeproj</code> project using an iOS simulator with the newest version of iOS installed, prioritising simulators that are already running.</p>
+<h5 id='configuration' class='heading'>Configuration</h5>
+
+<p>Usage: <code>xcutils test &lt;platform&gt; [options]</code></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>platform</code></td>
+<td>Yes</td>
+<td><code>iOS</code> \</td>
+<td><code>macOS</code> \</td>
+<td><code>tvOS</code></td>
+</tr>
+<tr>
+<td><code>--project</code>, <code>-p</code></td>
+<td>Yes</td>
+<td><code>String</code></td>
+<td>N/A</td>
+<td>The path to the project to test.</td>
+</tr>
+<tr>
+<td><code>--scheme</code>, <code>-s</code></td>
+<td>Yes</td>
+<td><code>String</code></td>
+<td>N/A</td>
+<td>The name of the scheme to test.</td>
+</tr>
+<tr>
+<td><code>--version</code>, <code>-v</code></td>
+<td>No</td>
+<td><code>String</code></td>
+<td><code>latest</code></td>
+<td>See <a href="#version-specifiers">version specifiers</a>.</td>
+</tr>
+</tbody></table>
+<h4 id='code-xcutils-select-code' class='heading'><code>xcutils select</code></h4>
+
+<p><code>xcutils select</code> makes finding and changing the changing the Xcode version used by the command line easy:</p>
+<pre class="highlight shell"><code>swift run xcutils <span class="k">select </span>latest
+</code></pre>
+
+<p>This will run <code>xcode-select</code> to select the latest version of Xcode installed in /Applications.</p>
+<h5 id='configuration' class='heading'>Configuration</h5>
+
+<p>Usage: <code>xcutils select [options] &lt;version specifier&gt;</code></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>version</code></td>
+<td>Yes</td>
+<td><code>String</code></td>
+<td><code>latest</code></td>
+<td>See <a href="#version-specifiers">version specifiers</a>.</td>
+</tr>
+<tr>
+<td><code>--printVersions</code>, <code>-p</code></td>
+<td>No</td>
+<td><code>Bool</code></td>
+<td><code>false</code></td>
+<td>Only print found version(s), sorted in version order.</td>
+</tr>
+<tr>
+<td><code>--searchPath</code>, <code>-P</code></td>
+<td>No</td>
+<td><code>URL</code></td>
+<td><code>/Applications</code></td>
+<td>The path to search for Xcode versions.</td>
+</tr>
+</tbody></table>
+<h3 id='version-specifiers' class='heading'>Version Specifiers</h3>
+
+<p>Special cases can be provided when specifying a version. These specifiers work against the <strong>locally installed</strong> versions, rather than the latest version published by Apple.</p>
+
+<table><thead>
+<tr>
+<th>Case</th>
+<th>Explanation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>latest</code></td>
+<td>The latest stable version</td>
+</tr>
+<tr>
+<td><code>last-major</code></td>
+<td>The last major stable version, e.g. 10.x.x if the latest version is 11.x.x</td>
+</tr>
+<tr>
+<td><code>last-minor</code></td>
+<td>The last minor stable version, e.g. 11.1.x if the latest version is 11.2.x</td>
+</tr>
+<tr>
+<td><code>beta</code></td>
+<td>The latest beta version</td>
+</tr>
+<tr>
+<td><code>11.3.1</code></td>
+<td>The exact version 11.3.1</td>
+</tr>
+<tr>
+<td><code>11.3</code></td>
+<td>The latest version 11.3 available (any patch)</td>
+</tr>
+<tr>
+<td><code>11</code></td>
+<td>The latest version 11 available (any minor; any patch)</td>
+</tr>
+</tbody></table>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-06-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
