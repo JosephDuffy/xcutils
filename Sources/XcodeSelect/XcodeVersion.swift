@@ -1,7 +1,7 @@
 import Foundation
 import Version
 
-public struct XcodeVersion: Comparable, CustomStringConvertible {
+public struct XcodeVersion: Comparable, CustomStringConvertible, Codable {
     
     public static func < (lhs: XcodeVersion, rhs: XcodeVersion) -> Bool {
         if lhs.version == rhs.version {

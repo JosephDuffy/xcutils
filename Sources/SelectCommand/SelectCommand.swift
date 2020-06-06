@@ -1,7 +1,9 @@
-import enum VersionSpecifier.VersionSpecifier
+import VersionSpecifier
 import Foundation
-import class XcodeSelect.XcodeSelect
+import XcodeSelect
 import ArgumentParser
+import Models
+import CLIHelpers
 
 public struct SelectCommand: ParsableCommand {
 
@@ -19,6 +21,9 @@ public struct SelectCommand: ParsableCommand {
     @Option(default: "/Applications")
     var searchPath: String
 
+    @Option(name: [.customLong("output"), .short], default: .humanFriendly)
+    var outputFormat: OutputFormat
+
     private var searchPathURL: URL {
         return URL(fileURLWithPath: searchPath, isDirectory: true)
     }
@@ -35,7 +40,7 @@ public struct SelectCommand: ParsableCommand {
         if printVersions {
             if let versionSpecifier = versionSpecifier {
                 if let version = try XcodeSelect.findVersion(matching: versionSpecifier, from: searchPathURL) {
-                    print(version)
+                    outputVersions([version])
                 } else {
                     print("No versions found matching", versionSpecifier)
                 }
@@ -43,15 +48,39 @@ public struct SelectCommand: ParsableCommand {
                 let versions = try XcodeSelect.findVersions(in: searchPathURL)
 
                 if !versions.isEmpty {
-                    print(versions.sorted(by: >).map { version in
-                        version.description
-                    }.joined(separator: "\n"))
+                    outputVersions(versions)
                 } else {
                     throw SelectCommandError.foundNoVersions(path: searchPathURL)
                 }
             }
         } else if let versionSpecifier = versionSpecifier {
             try XcodeSelect.selectVersion(specifier: versionSpecifier, from: searchPathURL)
+        }
+    }
+
+    private func outputVersions(_ versions: [XcodeVersion]) {
+        let sortedVersions = versions.sorted(by: >)
+        switch outputFormat {
+        case .humanFriendly:
+            let formattedString = sortedVersions
+                .map { version in
+                    version.description
+                }
+                .joined(separator: "\n")
+            print(formattedString)
+        case .json:
+            let jsonEncoder = JSONEncoder()
+            do {
+                let jsonData = try jsonEncoder.encode(sortedVersions)
+                guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    printError("JSON data was not UTF8; can't print")
+                    return
+                }
+
+                print(jsonString)
+            } catch {
+                printError(error.localizedDescription)
+            }
         }
     }
 

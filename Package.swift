@@ -32,6 +32,7 @@ let package = Package(
             dependencies: [
                 "XcodeSelect",
                 "GlobalOptions",
+                "Models",
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]
         ),
