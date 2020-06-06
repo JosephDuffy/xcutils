@@ -69,7 +69,6 @@ jobs:
     name: Build Docs
     runs-on: macos-latest
     strategy:
-      fail-fast: false
       matrix:
         xcode: ["11.5"]
 
