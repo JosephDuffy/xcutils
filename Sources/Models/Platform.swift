@@ -4,6 +4,8 @@ public enum Platform: String, RawRepresentable, ExpressibleByArgument, CaseItera
 
     case macOS
 
+    case macCatalyst
+
     case iOS
 
     case tvOS

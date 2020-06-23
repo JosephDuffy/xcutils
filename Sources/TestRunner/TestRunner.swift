@@ -30,6 +30,8 @@ public final class TestRunner {
         switch platform {
         case .macOS:
             destination = "platform=macOS"
+        case .macCatalyst:
+            destination = "platform=macOS,variant=Mac Catalyst"
         default:
             if enableVerboseLogging {
                 print("Getting available runtimes")
