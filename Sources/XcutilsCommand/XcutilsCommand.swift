@@ -1,5 +1,6 @@
 import ArchiveAppCommand
 import ArgumentParser
+import NotarizeCommand
 import TestCommand
 import SelectCommand
 import BuildCommand
@@ -11,6 +12,7 @@ public struct XcutilsCommand: ParsableCommand {
         subcommands: [
             ArchiveAppCommand.self,
             BuildCommand.self,
+            NotarizeCommand.self,
             SelectCommand.self,
             TestCommand.self,
         ]

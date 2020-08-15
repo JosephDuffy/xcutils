@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .executable(name: "xcutils", targets: ["xcutils"]),
         .library(name: "AppArchiver", targets: ["AppArchiver"]),
+        .library(name: "Notarize", targets: ["Notarize"]),
         .library(name: "TestRunner", targets: ["TestRunner"]),
         .library(name: "XcodeSelect", targets: ["XcodeSelect"]),
         .library(name: "VersionSpecifier", targets: ["VersionSpecifier"]),
@@ -24,6 +25,7 @@ let package = Package(
                 "ArchiveAppCommand",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "BuildCommand",
+                "NotarizeCommand",
                 "SelectCommand",
                 "TestCommand",
             ]
@@ -47,6 +49,17 @@ let package = Package(
         .target(name: "BuildCommand", dependencies: ["BuildRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
         .target(name: "BuildRunner", dependencies: ["Models", "Version", "VersionSpecifier", "SimulatorControl", "CLIHelpers"]),
+
+        .target(name: "Notarize", dependencies: ["AppArchiver", "CLIHelpers"]),
+
+        .target(
+            name: "NotarizeCommand",
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "GlobalOptions",
+                "Notarize"
+            ]
+        ),
 
         .target(
             name: "SelectCommand",
