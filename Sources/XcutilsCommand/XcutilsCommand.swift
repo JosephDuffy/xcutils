@@ -8,6 +8,7 @@ import BuildCommand
 public struct XcutilsCommand: ParsableCommand {
 
     public static var configuration = CommandConfiguration(
+        commandName: "xcutils",
         abstract: "A utility for working with Xcode.",
         subcommands: [
             ArchiveAppCommand.self,
