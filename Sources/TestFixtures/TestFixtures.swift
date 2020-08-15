@@ -8,16 +8,24 @@ public enum TestFixtures {
             xcodeFixture_9_4_1,
             xcodeFixture_10_0,
             xcodeFixture_10_3,
+            xcodeFixture_11_1,
+            xcodeFixture_11_2_beta,
             xcodeFixture_11_2_1,
             xcodeFixture_11_3_beta1,
             xcodeFixture_11_3,
             xcodeFixture_11_3_1,
             xcodeFixture_11_4_beta1,
+            xcodeFixture_11_4_beta2,
+            xcodeFixture_11_4_beta3,
             xcodeFixture_11_4,
             xcodeFixture_11_4_1,
+            xcodeFixture_11_5_beta,
             xcodeFixture_11_5,
             xcodeFixture_11_6,
             xcodeFixture_11_6_beta1,
+            xcodeFixture_12_beta,
+            xcodeFixture_12_beta2,
+            xcodeFixture_12_beta3,
             xcodeFixture_12_beta4,
         ]
     }
@@ -29,6 +37,12 @@ public enum TestFixtures {
     }
     public static var xcodeFixture_10_3: URL {
         url(forXcodeVersion: "10.3")
+    }
+    public static var xcodeFixture_11_1: URL {
+        url(forXcodeVersion: "11.1")
+    }
+    public static var xcodeFixture_11_2_beta: URL {
+        url(forXcodeVersion: "11.2-beta")
     }
     public static var xcodeFixture_11_2_1: URL {
         url(forXcodeVersion: "11.2.1")
@@ -45,11 +59,20 @@ public enum TestFixtures {
     public static var xcodeFixture_11_4_beta1: URL {
         url(forXcodeVersion: "11.4-beta")
     }
+    public static var xcodeFixture_11_4_beta2: URL {
+        url(forXcodeVersion: "11.4-beta2")
+    }
+    public static var xcodeFixture_11_4_beta3: URL {
+        url(forXcodeVersion: "11.4-beta3")
+    }
     public static var xcodeFixture_11_4: URL {
         url(forXcodeVersion: "11.4")
     }
     public static var xcodeFixture_11_4_1: URL {
         url(forXcodeVersion: "11.4.1")
+    }
+    public static var xcodeFixture_11_5_beta: URL {
+        url(forXcodeVersion: "11.5-beta")
     }
     public static var xcodeFixture_11_5: URL {
         url(forXcodeVersion: "11.5")
@@ -60,6 +83,15 @@ public enum TestFixtures {
     public static var xcodeFixture_11_6_beta1: URL {
         url(forXcodeVersion: "11.6-beta")
     }
+    public static var xcodeFixture_12_beta: URL {
+        url(forXcodeVersion: "12-beta")
+    }
+    public static var xcodeFixture_12_beta2: URL {
+        url(forXcodeVersion: "12-beta2")
+    }
+    public static var xcodeFixture_12_beta3: URL {
+        url(forXcodeVersion: "12-beta3")
+    }
     public static var xcodeFixture_12_beta4: URL {
         url(forXcodeVersion: "12-beta4")
     }
@@ -68,16 +100,24 @@ public enum TestFixtures {
             xcodeVersion_9_4_1,
             xcodeVersion_10_0,
             xcodeVersion_10_3,
+            xcodeVersion_11_1,
+            xcodeVersion_11_2_beta,
             xcodeVersion_11_2_1,
             xcodeVersion_11_3_beta1,
             xcodeVersion_11_3,
             xcodeVersion_11_3_1,
             xcodeVersion_11_4_beta1,
+            xcodeVersion_11_4_beta2,
+            xcodeVersion_11_4_beta3,
             xcodeVersion_11_4,
             xcodeVersion_11_4_1,
+            xcodeVersion_11_5_beta,
             xcodeVersion_11_5,
             xcodeVersion_11_6,
             xcodeVersion_11_6_beta1,
+            xcodeVersion_12_beta,
+            xcodeVersion_12_beta2,
+            xcodeVersion_12_beta3,
             xcodeVersion_12_beta4,
         ]
     }
@@ -103,6 +143,22 @@ public enum TestFixtures {
             version: Version(10, 3, 0),
             bundleVersion: 14492.2,
             build: "10G8"
+        )
+    }
+    public static var xcodeVersion_11_1: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_11_1,
+            version: Version(11, 1, 0),
+            bundleVersion: 15405,
+            build: "11A1027"
+        )
+    }
+    public static var xcodeVersion_11_2_beta: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_11_2_beta,
+            version: Version(major: 11, minor: 2, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 15519,
+            build: "11B44"
         )
     }
     public static var xcodeVersion_11_2_1: XcodeVersion {
@@ -145,6 +201,22 @@ public enum TestFixtures {
             build: "11N111s"
         )
     }
+    public static var xcodeVersion_11_4_beta2: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_11_4_beta2,
+            version: Version(major: 11, minor: 4, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 16126.2,
+            build: "11N123k"
+        )
+    }
+    public static var xcodeVersion_11_4_beta3: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_11_4_beta3,
+            version: Version(major: 11, minor: 4, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 16132.1,
+            build: "11N132i"
+        )
+    }
     public static var xcodeVersion_11_4: XcodeVersion {
         XcodeVersion(
             path: xcodeFixture_11_4,
@@ -161,11 +233,19 @@ public enum TestFixtures {
             build: "11E503a"
         )
     }
+    public static var xcodeVersion_11_5_beta: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_11_5_beta,
+            version: Version(major: 11, minor: 5, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 16139,
+            build: "11N605c"
+        )
+    }
     public static var xcodeVersion_11_5: XcodeVersion {
         XcodeVersion(
             path: xcodeFixture_11_5,
             version: Version(11, 5, 0),
-            bundleVersion: 16139.0,
+            bundleVersion: 16139,
             build: "11E608c"
         )
     }
@@ -183,6 +263,30 @@ public enum TestFixtures {
             version: Version(11, 6, 0),
             bundleVersion: 16141,
             build: "11E708"
+        )
+    }
+    public static var xcodeVersion_12_beta: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_12_beta,
+            version: Version(major: 12, minor: 0, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 17177,
+            build: "12A6159"
+        )
+    }
+    public static var xcodeVersion_12_beta2: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_12_beta2,
+            version: Version(major: 12, minor: 0, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 17175.2,
+            build: "12A6163b"
+        )
+    }
+    public static var xcodeVersion_12_beta3: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_12_beta3,
+            version: Version(major: 12, minor: 0, patch: 0, prereleaseIdentifiers: ["beta"]),
+            bundleVersion: 17189.4,
+            build: "12A8169g"
         )
     }
     public static var xcodeVersion_12_beta4: XcodeVersion {
