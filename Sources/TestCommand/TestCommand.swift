@@ -15,8 +15,8 @@ public struct TestCommand: ParsableCommand {
     @Argument()
     var platform: Platform
 
-    @Option(name: [.short, .customLong("version")], default: .latest)
-    var versionSpecifier: VersionSpecifier
+    @Option(name: [.short, .customLong("version")])
+    var versionSpecifier: VersionSpecifier = .latest
 
     @Option()
     var project: String?

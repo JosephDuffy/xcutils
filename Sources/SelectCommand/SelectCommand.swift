@@ -16,13 +16,13 @@ public struct SelectCommand: ParsableCommand {
     var versionSpecifier: VersionSpecifier?
 
     @Flag(help: "Only print found versions; do not switch")
-    var printVersions: Bool
+    var printVersions: Bool = false
 
-    @Option(default: "/Applications")
-    var searchPath: String
+    @Option()
+    var searchPath: String = "/Applications"
 
-    @Option(name: [.customLong("output"), .short], default: .humanFriendly)
-    var outputFormat: OutputFormat
+    @Option(name: [.customLong("output"), .short])
+    var outputFormat: OutputFormat = .humanFriendly
 
     private var searchPathURL: URL {
         return URL(fileURLWithPath: searchPath, isDirectory: true)
