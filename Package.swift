@@ -6,6 +6,7 @@ let package = Package(
     platforms: [.macOS(.v10_13)],
     products: [
         .executable(name: "xcutils", targets: ["xcutils"]),
+        .library(name: "AppArchiver", targets: ["AppArchiver"]),
         .library(name: "TestRunner", targets: ["TestRunner"]),
         .library(name: "XcodeSelect", targets: ["XcodeSelect"]),
         .library(name: "VersionSpecifier", targets: ["VersionSpecifier"]),
@@ -17,11 +18,31 @@ let package = Package(
     targets: [
         .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
 
-        .target(name: "XcutilsCommand", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"), "BuildCommand", "TestCommand", "SelectCommand"]),
+        .target(
+            name: "XcutilsCommand",
+            dependencies: [
+                "ArchiveAppCommand",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "BuildCommand",
+                "SelectCommand",
+                "TestCommand",
+            ]
+        ),
 
         .target(name: "TestCommand", dependencies: ["TestRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
         .target(name: "TestRunner", dependencies: ["Models", "Version", "VersionSpecifier", "SimulatorControl", "CLIHelpers"]),
+
+        .target(name: "AppArchiver", dependencies: ["CLIHelpers"]),
+
+        .target(
+            name: "ArchiveAppCommand",
+            dependencies: [
+                "AppArchiver",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "GlobalOptions",
+            ]
+        ),
 
         .target(name: "BuildCommand", dependencies: ["BuildRunner", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
 

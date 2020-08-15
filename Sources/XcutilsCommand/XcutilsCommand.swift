@@ -1,14 +1,19 @@
-import protocol ArgumentParser.ParsableCommand
-import struct ArgumentParser.CommandConfiguration
-import struct TestCommand.TestCommand
-import struct SelectCommand.SelectCommand
-import struct BuildCommand.BuildCommand
+import ArchiveAppCommand
+import ArgumentParser
+import TestCommand
+import SelectCommand
+import BuildCommand
 
 public struct XcutilsCommand: ParsableCommand {
 
     public static var configuration = CommandConfiguration(
         abstract: "A utility for working with Xcode.",
-        subcommands: [TestCommand.self, SelectCommand.self, BuildCommand.self]
+        subcommands: [
+            ArchiveAppCommand.self,
+            BuildCommand.self,
+            SelectCommand.self,
+            TestCommand.self,
+        ]
     )
 
     public init() {}
