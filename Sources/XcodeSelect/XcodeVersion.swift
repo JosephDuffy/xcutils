@@ -2,7 +2,6 @@ import Foundation
 import Version
 
 public struct XcodeVersion: Comparable, CustomStringConvertible, Codable {
-    
     public static func < (lhs: XcodeVersion, rhs: XcodeVersion) -> Bool {
         if lhs.version == rhs.version {
             if lhs.isBeta && !rhs.isBeta {
@@ -92,41 +91,6 @@ public struct XcodeVersion: Comparable, CustomStringConvertible, Codable {
     public var description: String {
         return "Xcode \(version) (\(build)) at \(path.path)"
     }
-    
-    public init?(url: URL) {
-        path = url
-
-        let decoder = PropertyListDecoder()
-        decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
-        let infoPlistURL = url.appendingPathComponent("Contents/Info.plist", isDirectory: false)
-        let versionPlistURL = url.appendingPathComponent("Contents/version.plist", isDirectory: false)
-        
-        guard let infoPlistData = FileManager.default.contents(atPath: infoPlistURL.path) else { return nil }
-        guard let versionPlistData = FileManager.default.contents(atPath: versionPlistURL.path) else { return nil }
-        
-        do {
-            var format = PropertyListSerialization.PropertyListFormat.binary
-            let infoPlist = try decoder.decode(XcodeInfoPlist.self, from: infoPlistData, format: &format)
-            let versionPlist = try decoder.decode(XcodeVersionPlist.self, from: versionPlistData, format: &format)
-
-            if infoPlist.iconFileName.hasSuffix("Beta") {
-                version = Version(
-                    major: versionPlist.version.major,
-                    minor: versionPlist.version.minor,
-                    patch: versionPlist.version.patch,
-                    prereleaseIdentifiers: versionPlist.version.prereleaseIdentifiers + ["beta"],
-                    buildMetadataIdentifiers: versionPlist.version.buildMetadataIdentifiers
-                )
-            } else {
-                version = versionPlist.version
-            }
-
-            bundleVersion = versionPlist.bundleVersion
-            build = versionPlist.build
-        } catch {
-            return nil
-        }
-    }
 
     public init(path: URL, version: Version, bundleVersion: Float, build: String) {
         self.path = path
@@ -135,4 +99,47 @@ public struct XcodeVersion: Comparable, CustomStringConvertible, Codable {
         self.build = build
     }
     
+}
+
+extension XcodeVersion {
+    public enum URLInitError: Error {
+        case missingInfoPlist
+        case missingVersionPlist
+        case decodeError(Error)
+    }
+
+    public init(url: URL) throws {
+        path = url
+
+        let decoder = PropertyListDecoder()
+        decoder.userInfo[.decodingMethod] = DecodingMethod.tolerant
+        let infoPlistURL = url.appendingPathComponent("Contents/Info.plist", isDirectory: false)
+        let versionPlistURL = url.appendingPathComponent("Contents/version.plist", isDirectory: false)
+
+        guard let infoPlistData = FileManager.default.contents(atPath: infoPlistURL.path) else {
+            throw URLInitError.missingInfoPlist
+        }
+        guard let versionPlistData = FileManager.default.contents(atPath: versionPlistURL.path) else {
+            throw URLInitError.missingVersionPlist
+        }
+
+        var format = PropertyListSerialization.PropertyListFormat.binary
+        let infoPlist = try decoder.decode(XcodeInfoPlist.self, from: infoPlistData, format: &format)
+        let versionPlist = try decoder.decode(XcodeVersionPlist.self, from: versionPlistData, format: &format)
+
+        if infoPlist.iconFileName.hasSuffix("Beta") {
+            version = Version(
+                major: versionPlist.version.major,
+                minor: versionPlist.version.minor,
+                patch: versionPlist.version.patch,
+                prereleaseIdentifiers: versionPlist.version.prereleaseIdentifiers + ["beta"],
+                buildMetadataIdentifiers: versionPlist.version.buildMetadataIdentifiers
+            )
+        } else {
+            version = versionPlist.version
+        }
+
+        bundleVersion = versionPlist.bundleVersion
+        build = versionPlist.build
+    }
 }

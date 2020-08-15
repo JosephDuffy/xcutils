@@ -9,7 +9,7 @@ public final class XcodeSelect {
             at: directory,
             includingPropertiesForKeys: []
         ).filter { $0.lastPathComponent.starts(with: "Xcode") && $0.hasDirectoryPath }
-        return xcodePaths.compactMap(XcodeVersion.init(url:)).sorted(by: >)
+        return xcodePaths.compactMap { try? XcodeVersion(url:$0) }.sorted(by: >)
     }
 
     public static func findVersion(matching specifier: VersionSpecifier, from directory: URL) throws -> XcodeVersion? {

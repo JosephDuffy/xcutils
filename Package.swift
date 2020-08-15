@@ -57,9 +57,25 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]
         ),
-        .testTarget(name: "SelectCommandTests", dependencies: ["SelectCommand"]),
+        .testTarget(
+            name: "SelectCommandTests",
+            dependencies: [
+                "SelectCommand",
+                "TestFixtures",
+                "XcodeSelect",
+                "Version",
+            ]
+        ),
 
         .target(name: "XcodeSelect", dependencies: ["Version", "VersionSpecifier", "CLIHelpers"]),
+        .testTarget(
+            name: "XcodeSelectTests",
+            dependencies: [
+                "TestFixtures",
+                "XcodeSelect",
+                "Version",
+            ]
+        ),
 
         .target(name: "SimulatorControl", dependencies: ["CLIHelpers", "Models", "Version"]),
 
@@ -68,6 +84,8 @@ let package = Package(
         .target(name: "Models", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")]),
 
         .target(name: "CLIHelpers", dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")]),
+
+        .target(name: "TestFixtures", dependencies: ["XcodeSelect", "Version"], exclude: ["Xcodes"]),
 
         .target(name: "VersionSpecifier", dependencies: ["Version", .product(name: "ArgumentParser", package: "swift-argument-parser")]),
         .testTarget(name: "VersionSpecifierTests", dependencies: ["VersionSpecifier"]),
