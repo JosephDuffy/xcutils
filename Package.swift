@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "VersionSpecifier", targets: ["VersionSpecifier"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mxcl/Version.git", from: "1.2.0"),
+        .package(url: "https://github.com/mxcl/Version.git", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
     ],
     targets: [
