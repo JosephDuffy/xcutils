@@ -6,15 +6,14 @@ public enum Notarizer {
     public enum Error: LocalizedError {
         /// An invalid file URL was provided. The URL must be to a .app or .zip.
         case invalidFileURL(URL)
-        /// Output could be be parsed as UTF8 text.
-        case outputDataNotUTF8
+        case outputDidNotContainJSON
 
         public var errorDescription: String? {
             switch self {
             case .invalidFileURL:
                 return "File URL must be a .app or .zip."
-            case .outputDataNotUTF8:
-                return "The output from altool was not valid UTF8"
+            case .outputDidNotContainJSON:
+                return "The output from altool did not contain JSON"
             }
         }
     }
@@ -100,10 +99,42 @@ public enum Notarizer {
         }
 
         let outputData = try run(enableVerboseLogging: enableVerboseLogging, command)
-        guard let output = String(data: outputData, encoding: .utf8) else {
-            throw Error.outputDataNotUTF8
+
+        /// `123` is the UTF8 codepoint for `{`
+        let openingBrace = UInt8(123)
+        let splitData = outputData.split(separator: openingBrace, maxSplits: 1, omittingEmptySubsequences: false)
+
+        guard splitData.count == 2 else {
+            throw Error.outputDidNotContainJSON
+        }
+        let jsonData = Data([openingBrace]) + splitData[1]
+        let decoder = JSONDecoder()
+        let output = try decoder.decode(NotarizeAppOutput.self, from: jsonData)
+
+        print(output.upload.requestUUID)
+    }
+}
+
+private struct NotarizeAppOutput: Codable {
+    struct Upload: Codable {
+        enum CodingKeys: String, CodingKey {
+            case requestUUID = "RequestUUID"
         }
 
-        print(output)
+        let requestUUID: String
     }
+
+    enum CodingKeys: String, CodingKey {
+        case toolVersion = "tool-version"
+        case toolPath = "tool-path"
+        case upload = "notarization-upload"
+        case successMessage = "success-message"
+        case osVersion = "os-version"
+    }
+
+    let toolVersion: String
+    let toolPath: String
+    let upload: Upload
+    let successMessage: String?
+    let osVersion: String
 }
