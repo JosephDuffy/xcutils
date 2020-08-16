@@ -4,14 +4,14 @@ import Foundation
 
 public enum Notarizer {
     public enum Error: LocalizedError {
-        /// An invalid file URL was provided. The URL must be to a .app or .zip.
+        /// An invalid file URL was provided. The URL must be to a .app, .xcarchive, or .zip.
         case invalidFileURL(URL)
         case outputDidNotContainJSON
 
         public var errorDescription: String? {
             switch self {
             case .invalidFileURL:
-                return "File URL must be a .app or .zip."
+                return "File URL must be a .app, .xcarchive, or .zip."
             case .outputDidNotContainJSON:
                 return "The output from altool did not contain JSON"
             }
@@ -47,7 +47,7 @@ public enum Notarizer {
     }
 
     /**
-     Notarize the app at the specified URL. If the URL is an app it will first be compressed in to a zip archive.
+     Notarize the app at the specified URL. If the URL is an app or xcarchive it will first be compressed in to a zip archive.
 
      - Parameters:
         - fileURL: The URL of the app to notarize.
@@ -69,9 +69,9 @@ public enum Notarizer {
                 primaryBundleId: primaryBundleId,
                 enableVerboseLogging: enableVerboseLogging
             )
-        } else if fileURL.path.hasSuffix(".app") {
+        } else if fileURL.path.hasSuffix(".app") || fileURL.path.hasSuffix(".xcarchive") {
             if enableVerboseLogging {
-                print("App was provieded, creating zip archive for uploading")
+                print("App was provided, creating zip archive for uploading")
             }
 
             let zipURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
