@@ -14,6 +14,7 @@ public struct XcutilsCommand: ParsableCommand {
             ArchiveAppCommand.self,
             BuildCommand.self,
             NotarizeCommand.self,
+            NotarizationInfoCommand.self,
             SelectCommand.self,
             TestCommand.self,
         ]
