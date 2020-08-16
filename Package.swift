@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/Version.git", from: "2.0.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.2.2"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.2.2"),
     ],
     targets: [
         .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
