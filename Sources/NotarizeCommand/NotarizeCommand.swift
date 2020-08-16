@@ -118,6 +118,9 @@ public struct NotarizeCommand: ParsableCommand {
             switch notarizationInfo.info.status {
             case .success:
                 print(notarizationInfo.info.statusMessage ?? "Notarization was accepted")
+                if let logFileURL = notarizationInfo.info.logFileURL {
+                    print("Log available at: \(logFileURL)")
+                }
             case .inProgress:
                 if completionTimeout > 0 {
                     let now = Date()
