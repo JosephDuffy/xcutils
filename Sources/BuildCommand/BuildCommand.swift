@@ -27,6 +27,9 @@ public struct BuildCommand: ParsableCommand {
     @Option()
     var scheme: String
 
+    @Option()
+    var buildDirectory: String?
+
     @OptionGroup()
     var globalOptions: GlobalOptions
 
@@ -39,6 +42,7 @@ public struct BuildCommand: ParsableCommand {
             project: project.map { URL(fileURLWithPath: $0, isDirectory: true) },
             workspace: workspace.map { URL(fileURLWithPath: $0, isDirectory: true) },
             scheme: scheme,
+            buildDirectory: buildDirectory.map { URL(fileURLWithPath: $0, isDirectory: true) },
             enableVerboseLogging: globalOptions.verbose
         )
     }

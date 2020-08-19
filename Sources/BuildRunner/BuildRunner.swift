@@ -6,7 +6,6 @@ import struct Version.Version
 import SimulatorControl
 
 public final class BuildRunner {
-
     /**
      Builds a scheme using `xcodebuild`.
 
@@ -15,6 +14,7 @@ public final class BuildRunner {
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
      - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.     
      - parameter scheme: The scheme to test. For swift packages this is the target.
+     - parameter buildDirectory: The directory place the build artifacts in to. Unlike `xcodebuild` this is related to the working directory, not the project.
      */
     public static func build(
         platform: Platform,
@@ -22,6 +22,7 @@ public final class BuildRunner {
         project: URL?,
         workspace: URL?,
         scheme: String,
+        buildDirectory: URL?,
         enableVerboseLogging: Bool = false
     ) throws {
         let destination: String
@@ -89,6 +90,10 @@ public final class BuildRunner {
         workspace.map { workspace in
             command.append("-workspace")
             command.append(workspace.path)
+        }
+
+        buildDirectory.map { buildDirectory in
+            command.append("BUILD_DIR=\(buildDirectory.path)")
         }
         
         try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
