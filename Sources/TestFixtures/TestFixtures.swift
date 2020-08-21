@@ -5,6 +5,7 @@ import Version
 public enum TestFixtures {
     public static var allXcodeFixtures: [URL] {
         [
+            xcodeFixture_8_3,
             xcodeFixture_9_4_1,
             xcodeFixture_10_0,
             xcodeFixture_10_3,
@@ -28,6 +29,9 @@ public enum TestFixtures {
             xcodeFixture_12_beta3,
             xcodeFixture_12_beta4,
         ]
+    }
+    public static var xcodeFixture_8_3: URL {
+        url(forXcodeVersion: "8.3")
     }
     public static var xcodeFixture_9_4_1: URL {
         url(forXcodeVersion: "9.4.1")
@@ -97,6 +101,7 @@ public enum TestFixtures {
     }
     public static var allXcodeVersions: [XcodeVersion] {
         [
+            xcodeVersion_8_3,
             xcodeVersion_9_4_1,
             xcodeVersion_10_0,
             xcodeVersion_10_3,
@@ -120,6 +125,14 @@ public enum TestFixtures {
             xcodeVersion_12_beta3,
             xcodeVersion_12_beta4,
         ]
+    }
+    public static var xcodeVersion_8_3: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_8_3,
+            version: Version(8, 3, 0),
+            bundleVersion: 12169,
+            build: "8E162"
+        )
     }
     public static var xcodeVersion_9_4_1: XcodeVersion {
         XcodeVersion(
