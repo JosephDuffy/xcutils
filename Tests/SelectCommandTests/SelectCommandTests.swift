@@ -5,6 +5,18 @@ import XcodeSelect
 import SelectCommand
 
 final class SelectCommandTests: XCTestCase {
+    override func setUpWithError() throws {
+        let process = Process()
+        process.launchPath = "/usr/bin/env"
+        process.arguments = [
+            "mdimport",
+            TestFixtures.xcodesURL.path,
+        ]
+
+        try process.run()
+        process.waitUntilExit()
+    }
+
     func testPrintVersionsWithASingleVersion() throws {
         let binary = productsDirectory.appendingPathComponent("xcutils")
 
