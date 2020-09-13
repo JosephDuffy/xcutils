@@ -49,6 +49,21 @@ public func run(enableVerboseLogging: Bool = false, _ command: [String], streamO
     if process.terminationStatus != 0 {
         let errorData = standardError.fileHandleForReading.readDataToEndOfFile()
         let error = String(data: errorData, encoding: .utf8)!
-        throw CommandError(message: error, exitCode: process.terminationStatus)
+        let output = (
+                (process.standardOutput as? Pipe)?
+                .fileHandleForReading
+                .readDataToEndOfFile()
+            )
+            .flatMap { data in
+                String(data: data, encoding: .utf8)
+            }
+
+        if enableVerboseLogging {
+            print("Termination status \(process.terminationStatus)")
+            if let output = output {
+                print("Output: \(output)")
+            }
+        }
+        throw CommandError(message: error.isEmpty ? output ?? "" : error, exitCode: process.terminationStatus)
     }
 }
