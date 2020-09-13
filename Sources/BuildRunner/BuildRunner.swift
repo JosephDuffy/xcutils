@@ -25,11 +25,98 @@ public final class BuildRunner {
         buildDirectory: URL?,
         enableVerboseLogging: Bool = false
     ) throws {
-        let destination: String
+        let destination = try self.destination(
+            for: platform,
+            versionSpecifier: versionSpecifier,
+            enableVerboseLogging: enableVerboseLogging
+        )
+
+        var command: [String] = [
+            "xcodebuild",
+            "build",
+            "-scheme",
+            scheme,
+            "-destination",
+            destination,
+        ]
+
+        project.map { project in
+            command.append("-project")
+            command.append(project.path)
+        }
+
+        workspace.map { workspace in
+            command.append("-workspace")
+            command.append(workspace.path)
+        }
+
+        buildDirectory.map { buildDirectory in
+            command.append("BUILD_DIR=\(buildDirectory.path)")
+        }
         
+        try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
+    }
+
+    /**
+     Archives a scheme using `xcodebuild`.
+
+     - parameter platform: The platform to build the scheme for.
+     - parameter versionSpecifier: The version of the platform to test.
+     - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
+     - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
+     - parameter scheme: The scheme to test. For swift packages this is the target.
+     - parameter archivePath: The path to output the archive to. If the path doesn't end in `.xcarchive` it will be automatically appended.
+     */
+    public static func archive(
+        platform: Platform,
+        versionSpecifier: VersionSpecifier,
+        project: URL?,
+        workspace: URL?,
+        scheme: String,
+        archivePath: String?,
+        enableVerboseLogging: Bool = false
+    ) throws {
+        let destination = try self.destination(
+            for: platform,
+            versionSpecifier: versionSpecifier,
+            enableVerboseLogging: enableVerboseLogging
+        )
+
+        var command: [String] = [
+            "xcodebuild",
+            "archive",
+            "-scheme",
+            scheme,
+            "-destination",
+            destination,
+        ]
+
+        project.map { project in
+            command.append("-project")
+            command.append(project.path)
+        }
+
+        workspace.map { workspace in
+            command.append("-workspace")
+            command.append(workspace.path)
+        }
+
+        archivePath.map { archivePath in
+            command.append("-archivePath")
+            command.append(archivePath)
+        }
+
+        try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
+    }
+
+    private static func destination(
+        for platform: Platform,
+        versionSpecifier: VersionSpecifier,
+        enableVerboseLogging: Bool
+    ) throws -> String {
         switch platform {
         case .macOS:
-            destination = "platform=macOS"
+            return "platform=macOS"
         default:
             if enableVerboseLogging {
                 print("Getting available runtimes")
@@ -70,35 +157,9 @@ public final class BuildRunner {
             }
 
             let simulator = supportedSimulators.first(where: { $0.state == .booted }) ?? supportedSimulators.first!
-            destination = "id=\(simulator.udid.uuidString)"
+            return "id=\(simulator.udid.uuidString)"
         }
-
-        var command: [String] = [
-            "xcodebuild",
-            "build",
-            "-scheme",
-            scheme,
-            "-destination",
-            destination,
-        ]
-
-        project.map { project in
-            command.append("-project")
-            command.append(project.path)
-        }
-
-        workspace.map { workspace in
-            command.append("-workspace")
-            command.append(workspace.path)
-        }
-
-        buildDirectory.map { buildDirectory in
-            command.append("BUILD_DIR=\(buildDirectory.path)")
-        }
-        
-        try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
     }
-    
 }
 
 private struct RuntimesOutput: Codable {
