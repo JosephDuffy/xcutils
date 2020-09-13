@@ -24,6 +24,9 @@ public struct SelectCommand: ParsableCommand {
     @Option(name: [.customLong("output"), .short])
     var outputFormat: OutputFormat = .humanFriendly
 
+    @Flag(help: "Do not use spotlight index; query filesystem directly")
+    var ignoreSpotlightIndex: Bool = false
+
     private var searchPathURL: URL {
         return URL(fileURLWithPath: searchPath, isDirectory: true)
     }
@@ -39,13 +42,13 @@ public struct SelectCommand: ParsableCommand {
     public func run() throws {
         if printVersions {
             if let versionSpecifier = versionSpecifier {
-                if let version = try XcodeSelect.findVersion(matching: versionSpecifier, from: searchPathURL) {
+                if let version = try XcodeSelect.findVersion(matching: versionSpecifier, from: searchPathURL, ignoreSpotlightIndex: ignoreSpotlightIndex) {
                     outputVersions([version])
                 } else {
                     print("No versions found matching", versionSpecifier)
                 }
             } else {
-                let versions = try XcodeSelect.findVersions(in: searchPathURL)
+                let versions = try XcodeSelect.findVersions(in: searchPathURL, ignoreSpotlightIndex: ignoreSpotlightIndex)
 
                 if !versions.isEmpty {
                     outputVersions(versions)

@@ -4,16 +4,30 @@ import func CLIHelpers.run
 
 public final class XcodeSelect {
     
-    public static func findVersions(in directory: URL) throws -> [XcodeVersion] {
-        let xcodePaths = try FileManager.default.contentsOfDirectory(
-            at: directory,
-            includingPropertiesForKeys: []
-        ).filter { $0.lastPathComponent.starts(with: "Xcode") && $0.hasDirectoryPath }
-        return xcodePaths.compactMap { try? XcodeVersion(url:$0) }.sorted(by: >)
+    public static func findVersions(in directory: URL, ignoreSpotlightIndex: Bool = false) throws -> [XcodeVersion] {
+        if ignoreSpotlightIndex {
+            let xcodePaths = try FileManager.default.contentsOfDirectory(
+                at: directory,
+                includingPropertiesForKeys: []
+            ).filter { $0.lastPathComponent.starts(with: "Xcode") && $0.hasDirectoryPath }
+            return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
+        } else {
+            let command: [String] = [
+                "mdfind",
+                "kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'",
+                "-onlyin",
+                directory.path,
+            ]
+
+            let outputData = try run(command)
+            let output = String(data: outputData, encoding: .utf8)!
+            let xcodePaths = output.split(separator: "\n").map { URL(fileURLWithPath: String($0), isDirectory: true) }
+            return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
+        }
     }
 
-    public static func findVersion(matching specifier: VersionSpecifier, from directory: URL) throws -> XcodeVersion? {
-        let xcodeVersions = try findVersions(in: directory)
+    public static func findVersion(matching specifier: VersionSpecifier, from directory: URL, ignoreSpotlightIndex: Bool = false) throws -> XcodeVersion? {
+        let xcodeVersions = try findVersions(in: directory, ignoreSpotlightIndex: ignoreSpotlightIndex)
 
         return xcodeVersions.findElementWithVersion(matching: specifier, at: \.version)
     }
