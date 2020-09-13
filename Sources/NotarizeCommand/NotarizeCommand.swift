@@ -121,6 +121,11 @@ public struct NotarizeCommand: ParsableCommand {
                 if let logFileURL = notarizationInfo.info.logFileURL {
                     print("Log available at: \(logFileURL)")
                 }
+            case .invalid:
+                print(notarizationInfo.info.statusMessage ?? "Uploaded package was invalid")
+                if let logFileURL = notarizationInfo.info.logFileURL {
+                    print("Log available at: \(logFileURL)")
+                }
             case .inProgress:
                 if completionTimeout > 0 {
                     let now = Date()

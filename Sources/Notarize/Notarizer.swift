@@ -200,6 +200,7 @@ public struct NotarizationInfo: Codable {
         public enum Status: String, Codable {
             case success
             case inProgress = "in progress"
+            case invalid
         }
 
         public let status: Status
