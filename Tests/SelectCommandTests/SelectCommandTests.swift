@@ -24,7 +24,7 @@ final class SelectCommandTests: XCTestCase {
         process.executableURL = binary
         process.arguments = [
             "select",
-            "--search-path", "\(TestFixtures.xcodesURL.path)",
+            "--search-path", TestFixtures.xcodesURL.path,
             "--print-versions",
         ]
 
