@@ -17,7 +17,7 @@ final class SelectCommandTests: XCTestCase {
         process.waitUntilExit()
     }
 
-    func testPrintVersionsWithASingleVersion() throws {
+    func _testPrintVersionsWithSpotlightCache() throws {
         let binary = productsDirectory.appendingPathComponent("xcutils")
 
         let process = Process()
@@ -25,6 +25,32 @@ final class SelectCommandTests: XCTestCase {
         process.arguments = [
             "select",
             "--search-path", TestFixtures.xcodesURL.path,
+            "--print-versions",
+        ]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+
+        try process.run()
+        process.waitUntilExit()
+
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)
+
+        let expectedOutput = TestFixtures.allXcodeVersions.sorted(by: >).map(\.description).joined(separator: "\n") + "\n"
+
+        XCTAssertEqual(output, expectedOutput)
+    }
+
+    func testPrintVersionsWithoutSpotlightCache() throws {
+        let binary = productsDirectory.appendingPathComponent("xcutils")
+
+        let process = Process()
+        process.executableURL = binary
+        process.arguments = [
+            "select",
+            "--search-path", TestFixtures.xcodesURL.path,
+            "--ignore-spotlight-index",
             "--print-versions",
         ]
 
