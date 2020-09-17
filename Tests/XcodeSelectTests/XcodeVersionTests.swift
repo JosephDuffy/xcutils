@@ -6,7 +6,7 @@ import XCTest
 
 final class XcodeVersionTests: XCTestCase {
     func testVersionSorting() throws {
-        let xcodeVersions = TestFixtures.allXcodeFixtures.compactMap { try? XcodeVersion(url: $0) }
+        let xcodeVersions = try TestFixtures.allXcodeFixtures.map { try XcodeVersion(url: $0) }.sorted()
         let expectedVersions = [
             TestFixtures.xcodeVersion_8_3,
             TestFixtures.xcodeVersion_9_4_1,
@@ -25,8 +25,8 @@ final class XcodeVersionTests: XCTestCase {
             TestFixtures.xcodeVersion_11_4_1,
             TestFixtures.xcodeVersion_11_5_beta,
             TestFixtures.xcodeVersion_11_5,
-            TestFixtures.xcodeVersion_11_6,
             TestFixtures.xcodeVersion_11_6_beta1,
+            TestFixtures.xcodeVersion_11_6,
             TestFixtures.xcodeVersion_12_beta,
             TestFixtures.xcodeVersion_12_beta2,
             TestFixtures.xcodeVersion_12_beta3,
