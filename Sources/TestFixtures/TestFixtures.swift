@@ -32,6 +32,7 @@ public enum TestFixtures {
             xcodeFixture_12_beta6,
             xcodeFixture_12_gm_12A7208,
             xcodeFixture_12_gm_12A7209,
+            xcodeFixture_12_0_1,
             xcodeFixture_12_2_beta,
         ]
     }
@@ -116,6 +117,9 @@ public enum TestFixtures {
     public static var xcodeFixture_12_gm_12A7209: URL {
         url(forXcodeVersion: "12_GM_12A7209")
     }
+    public static var xcodeFixture_12_0_1: URL {
+        url(forXcodeVersion: "12.0.1")
+    }
     public static var xcodeFixture_12_2_beta: URL {
         url(forXcodeVersion: "12.2-beta")
     }
@@ -148,6 +152,7 @@ public enum TestFixtures {
             xcodeVersion_12_beta6,
             xcodeVersion_12_gm_12A7208,
             xcodeVersion_12_gm_12A7209,
+            xcodeVersion_12_0_1,
             xcodeVersion_12_2_beta,
         ]
     }
@@ -365,6 +370,14 @@ public enum TestFixtures {
             version: Version(major: 12, minor: 0, patch: 0),
             bundleVersion: 17219,
             build: "12A7209"
+        )
+    }
+    public static var xcodeVersion_12_0_1: XcodeVersion {
+        XcodeVersion(
+            path: xcodeFixture_12_0_1,
+            version: Version(major: 12, minor: 0, patch: 1),
+            bundleVersion: 17220,
+            build: "12A7300"
         )
     }
     public static var xcodeVersion_12_2_beta: XcodeVersion {

@@ -35,6 +35,7 @@ final class XcodeVersionTests: XCTestCase {
             TestFixtures.xcodeVersion_12_beta6,
             TestFixtures.xcodeVersion_12_gm_12A7208,
             TestFixtures.xcodeVersion_12_gm_12A7209,
+            TestFixtures.xcodeVersion_12_0_1,
             TestFixtures.xcodeVersion_12_2_beta,
         ]
         XCTAssertEqual(xcodeVersions, expectedVersions)
