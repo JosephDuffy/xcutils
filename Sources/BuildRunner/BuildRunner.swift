@@ -13,7 +13,8 @@ public final class BuildRunner {
      - parameter versionSpecifier: The version of the platform to test.
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
      - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.     
-     - parameter scheme: The scheme to test. For swift packages this is the target.
+     - parameter scheme: The scheme to buikd. For swift packages this is the target.
+     - parameter configuration: The configuration to build.
      - parameter buildDirectory: The directory place the build artifacts in to. Unlike `xcodebuild` this is related to the working directory, not the project.
      */
     public static func build(
@@ -22,6 +23,7 @@ public final class BuildRunner {
         project: URL?,
         workspace: URL?,
         scheme: String,
+        configuration: String?,
         buildDirectory: URL?,
         enableVerboseLogging: Bool = false
     ) throws {
@@ -50,6 +52,11 @@ public final class BuildRunner {
             command.append(workspace.path)
         }
 
+        configuration.map { configuration in
+            command.append("-configuration")
+            command.append(configuration)
+        }
+
         buildDirectory.map { buildDirectory in
             command.append("BUILD_DIR=\(buildDirectory.path)")
         }
@@ -64,7 +71,8 @@ public final class BuildRunner {
      - parameter versionSpecifier: The version of the platform to test.
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
      - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
-     - parameter scheme: The scheme to test. For swift packages this is the target.
+     - parameter scheme: The scheme to archive. For swift packages this is the target.
+     - parameter configuration: The configuration to archive.
      - parameter archivePath: The path to output the archive to. If the path doesn't end in `.xcarchive` it will be automatically appended.
      */
     public static func archive(
@@ -73,6 +81,7 @@ public final class BuildRunner {
         project: URL?,
         workspace: URL?,
         scheme: String,
+        configuration: String?,
         archivePath: String?,
         enableVerboseLogging: Bool = false
     ) throws {
@@ -99,6 +108,11 @@ public final class BuildRunner {
         workspace.map { workspace in
             command.append("-workspace")
             command.append(workspace.path)
+        }
+
+        configuration.map { configuration in
+            command.append("-configuration")
+            command.append(configuration)
         }
 
         archivePath.map { archivePath in
