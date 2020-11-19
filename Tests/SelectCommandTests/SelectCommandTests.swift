@@ -88,7 +88,7 @@ final class SelectCommandTests: XCTestCase {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
 
-        XCTAssertEqual(output, "Found no version at \(rootURL.path)")
+        XCTAssertEqual(output, "Found no version at \(rootURL.path)\n")
     }
 
     /// Returns path to the built products directory.
