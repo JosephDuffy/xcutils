@@ -11,12 +11,7 @@ public final class XcodeSelect {
                 includingPropertiesForKeys: []
             ).filter { $0.lastPathComponent.starts(with: "Xcode") && $0.hasDirectoryPath }
 
-            if xcodePaths.isEmpty {
-                // Fallback to not using spotlight index
-                return try findVersions(in: directory, ignoreSpotlightIndex: true)
-            } else {
-                return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
-            }
+            return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
         } else {
             let command: [String] = [
                 "mdfind",
@@ -28,7 +23,12 @@ public final class XcodeSelect {
             let outputData = try run(command)
             let output = String(data: outputData, encoding: .utf8)!
             let xcodePaths = output.split(separator: "\n").map { URL(fileURLWithPath: String($0), isDirectory: true) }
-            return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
+            if xcodePaths.isEmpty {
+                // Fallback to not using spotlight index
+                return try findVersions(in: directory, ignoreSpotlightIndex: true)
+            } else {
+                return xcodePaths.compactMap { try? XcodeVersion(url: $0) }.sorted(by: >)
+            }
         }
     }
 
