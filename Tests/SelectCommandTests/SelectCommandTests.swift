@@ -50,7 +50,6 @@ final class SelectCommandTests: XCTestCase {
         process.arguments = [
             "select",
             "--search-path", TestFixtures.xcodesURL.path,
-            "--ignore-spotlight-index",
             "--print-versions",
         ]
 
