@@ -1,12 +1,12 @@
 {
   "warnings": [
     {
-      "file": "/Users/runner/runners/2.263.0/work/xcutils/xcutils/Sources/BuildCommand/BuildCommand.swift",
-      "line": 8,
-      "symbol": "BuildCommand",
-      "symbol_kind": "source.lang.swift.decl.struct",
+      "file": "/Users/runner/work/xcutils/xcutils/Sources/AppArchiver/AppArchiver.swift",
+      "line": 4,
+      "symbol": "AppArchiver",
+      "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/runner/runners/2.263.0/work/xcutils/xcutils"
+  "source_directory": "/Users/runner/work/xcutils/xcutils"
 }
