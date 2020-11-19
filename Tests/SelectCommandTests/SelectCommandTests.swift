@@ -79,20 +79,16 @@ final class SelectCommandTests: XCTestCase {
             "--print-versions",
         ]
 
-        let standardErrorPipe = Pipe()
-        process.standardError = standardErrorPipe
+        let pipe = Pipe()
+        process.standardOutput = pipe
 
         try process.run()
         process.waitUntilExit()
 
-        let standardErrorData = standardErrorPipe.fileHandleForReading.readDataToEndOfFile()
-        let standardError = String(data: standardErrorData, encoding: .utf8)
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)
 
-        let status = process.terminationStatus
-
-        XCTAssertEqual(status, 1, "Should exit with error status 1")
-        let error = SelectCommandError.foundNoVersions(path: rootURL)
-        XCTAssertEqual(standardError, "Error: \(error)\n")
+        XCTAssertEqual(output, "Found no version at \(rootURL.path)")
     }
 
     /// Returns path to the built products directory.

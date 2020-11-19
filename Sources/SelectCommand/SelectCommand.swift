@@ -45,16 +45,17 @@ public struct SelectCommand: ParsableCommand {
                 if let version = try XcodeSelect.findVersion(matching: versionSpecifier, from: searchPathURL, ignoreSpotlightIndex: ignoreSpotlightIndex) {
                     outputVersions([version])
                 } else {
-                    print("No versions found matching", versionSpecifier)
+                    switch outputFormat {
+                    case .humanFriendly:
+                        print("No versions found matching", versionSpecifier)
+                    case .json:
+                        print("[]")
+                    }
                 }
             } else {
                 let versions = try XcodeSelect.findVersions(in: searchPathURL, ignoreSpotlightIndex: ignoreSpotlightIndex)
 
-                if !versions.isEmpty {
-                    outputVersions(versions)
-                } else {
-                    throw SelectCommandError.foundNoVersions(path: searchPathURL)
-                }
+                outputVersions(versions)
             }
         } else if let versionSpecifier = versionSpecifier {
             try XcodeSelect.selectVersion(specifier: versionSpecifier, from: searchPathURL)
@@ -65,6 +66,11 @@ public struct SelectCommand: ParsableCommand {
         let sortedVersions = versions.sorted(by: >)
         switch outputFormat {
         case .humanFriendly:
+            guard !versions.isEmpty else {
+                print("Found no version at \(searchPath)")
+                return
+            }
+
             let formattedString = sortedVersions
                 .map { version in
                     version.description
