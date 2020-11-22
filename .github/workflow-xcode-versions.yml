@@ -1,0 +1,21 @@
+workflows:
+  workflows/release.yml:
+    jobs:
+      create_release:
+        strategy:
+          matrix:
+            xcode: latest
+      build_docs:
+        strategy:
+          matrix:
+            xcode: latest
+
+  workflows/test.yml:
+    jobs:
+      tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
