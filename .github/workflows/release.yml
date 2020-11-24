@@ -1,3 +1,5 @@
+Existing key ['jobs', 'create_release', 'strategy', 'matrix', 'xcode'] has value 12.2
+Setting key ['jobs', 'create_release', 'strategy', 'matrix', 'xcode'] to ['12.2']
 name: Release
 
 on:
