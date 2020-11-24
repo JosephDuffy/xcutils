@@ -17,6 +17,6 @@ jobs:
         with:
           token: ${{ secrets.UPDATE_XCODE_VERSIONS_GITHUB_TOKEN }}
 
-      - uses: josephduffy/update-xcode-version-action@use-execa
+      - uses: josephduffy/update-xcode-version-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
