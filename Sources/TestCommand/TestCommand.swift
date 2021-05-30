@@ -27,6 +27,9 @@ public struct TestCommand: ParsableCommand {
     @Option()
     var scheme: String
 
+    @Option()
+    var simulatorName: String?
+
     @Flag(inversion: .prefixedEnableDisable, help: "Explicitly enable or disable code coverage. If this flag is ommited the project's settings will be used")
     var codeCoverage: Bool?
 
@@ -42,6 +45,7 @@ public struct TestCommand: ParsableCommand {
             project: project.map { URL(fileURLWithPath: $0, isDirectory: true) },
             workspace: workspace.map { URL(fileURLWithPath: $0, isDirectory: true) },
             scheme: scheme,
+            simulatorName: simulatorName,
             enableCodeCoverage: codeCoverage,
             enableVerboseLogging: globalOptions.verbose
         )

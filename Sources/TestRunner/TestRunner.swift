@@ -22,6 +22,7 @@ public final class TestRunner {
         project: URL?,
         workspace: URL?,
         scheme: String,
+        simulatorName: String? = nil,
         enableCodeCoverage: Bool? = nil,
         enableVerboseLogging: Bool = false
     ) throws {
@@ -71,8 +72,18 @@ public final class TestRunner {
                 exit(1)
             }
 
-            let simulator = supportedSimulators.first(where: { $0.state == .booted }) ?? supportedSimulators.first!
-            destination = "id=\(simulator.udid.uuidString)"
+            if let simulatorName = simulatorName {
+                if let simulator = supportedSimulators.first(where: { $0.name == simulatorName }) {
+                    destination = "id=\(simulator.udid.uuidString)"
+                } else {
+                    printError("Found no simulators with platform \(platform), version \(versionSpecifier), and name \(simulatorName)")
+                    
+                    exit(1)
+                }
+            } else {
+                let simulator = supportedSimulators.first(where: { $0.state == .booted }) ?? supportedSimulators.first!
+                destination = "id=\(simulator.udid.uuidString)"
+            }
         }
 
         var command: [String] = [
