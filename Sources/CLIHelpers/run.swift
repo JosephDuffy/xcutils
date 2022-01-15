@@ -1,9 +1,4 @@
-import class Foundation.Process
-import class Foundation.Pipe
-import struct Foundation.Data
-import class Foundation.NotificationCenter
-import protocol Foundation.NSObjectProtocol
-import struct Foundation.Notification
+import Foundation
 
 public struct CommandError: Error {
     public let message: String
