@@ -81,7 +81,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.94.0
+        uses: ruby/setup-ruby@v1.95.0
         with:
           bundler-cache: true
 
