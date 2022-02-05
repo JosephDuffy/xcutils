@@ -11,8 +11,14 @@ public func run(enableVerboseLogging: Bool = false, _ command: String...) throws
 
 public func run(enableVerboseLogging: Bool = false, _ command: [String]) throws -> Data {
     let pipe = Pipe()
+    // This seems to be required to prevent a deadlock when the
+    // pipe gets full.
+    var result = Data()
+    pipe.fileHandleForReading.readabilityHandler = { fileHandle in
+        result.append(fileHandle.availableData)
+    }
     try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .pipe(pipe))
-    return pipe.fileHandleForReading.readDataToEndOfFile()
+    return result
 }
 
 public enum CommandOutput {
@@ -22,12 +28,13 @@ public enum CommandOutput {
 
 public func run(enableVerboseLogging: Bool = false, _ command: [String], streamOutputTo output: CommandOutput) throws {
     let process = Process()
+    #warning("TODO: Use `executableURL`")
     process.launchPath = "/usr/bin/env"
     process.arguments = command
 
     switch output {
     case .pipe(let pipe):
-        process.standardOutput = pipe
+        process.standardOutput = pipe.fileHandleForWriting
     case .standardOut:
         break
     }
@@ -41,6 +48,10 @@ public func run(enableVerboseLogging: Bool = false, _ command: [String], streamO
     try process.run()
     process.waitUntilExit()
 
+    if enableVerboseLogging {
+        print("Termination status \(process.terminationStatus)")
+    }
+
     if process.terminationStatus != 0 {
         let errorData = standardError.fileHandleForReading.readDataToEndOfFile()
         let error = String(data: errorData, encoding: .utf8)!
@@ -53,11 +64,8 @@ public func run(enableVerboseLogging: Bool = false, _ command: [String], streamO
                 String(data: data, encoding: .utf8)
             }
 
-        if enableVerboseLogging {
-            print("Termination status \(process.terminationStatus)")
-            if let output = output {
-                print("Output: \(output)")
-            }
+        if enableVerboseLogging, let output = output {
+            print("Output: \(output)")
         }
         throw CommandError(message: error.isEmpty ? output ?? "" : error, exitCode: process.terminationStatus)
     }
