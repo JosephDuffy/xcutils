@@ -27,6 +27,7 @@ final class XcodeVersionTests: XCTestCase {
             TestFixtures.xcodeVersion_11_5,
             TestFixtures.xcodeVersion_11_6_beta1,
             TestFixtures.xcodeVersion_11_6,
+            TestFixtures.xcodeVersion_11_7,
             TestFixtures.xcodeVersion_12_beta,
             TestFixtures.xcodeVersion_12_beta2,
             TestFixtures.xcodeVersion_12_beta3,
@@ -36,7 +37,10 @@ final class XcodeVersionTests: XCTestCase {
             TestFixtures.xcodeVersion_12_gm_12A7208,
             TestFixtures.xcodeVersion_12_gm_12A7209,
             TestFixtures.xcodeVersion_12_0_1,
+            TestFixtures.xcodeVersion_12_1,
             TestFixtures.xcodeVersion_12_2_beta,
+            TestFixtures.xcodeVersion_12_2,
+            TestFixtures.xcodeVersion_12_3_beta,
         ]
         XCTAssertEqual(xcodeVersions, expectedVersions)
     }

@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/mxcl/Version.git", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.2.2"),
+        .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1")
     ],
     targets: [
         .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
@@ -73,6 +74,7 @@ let package = Package(
         .testTarget(
             name: "SelectCommandTests",
             dependencies: [
+                "Difference",
                 "SelectCommand",
                 "TestFixtures",
                 "XcodeSelect",
