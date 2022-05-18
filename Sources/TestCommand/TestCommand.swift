@@ -30,7 +30,7 @@ public struct TestCommand: ParsableCommand {
     @Option()
     var simulatorName: String?
 
-    @Flag(inversion: .prefixedEnableDisable, help: "Explicitly enable or disable code coverage. If this flag is ommited the project's settings will be used")
+    @Flag(inversion: .prefixedEnableDisable, help: "Explicitly enable or disable code coverage. If this flag is omitted the project's settings will be used")
     var codeCoverage: Bool?
 
     @OptionGroup()
