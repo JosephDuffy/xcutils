@@ -12,6 +12,8 @@ public enum Platform: String, RawRepresentable, ExpressibleByArgument, CaseItera
 
     case watchOS
 
+    case visionOS
+
     public init?(rawValue string: String) {
         for platform in Platform.allCases where string.lowercased() == platform.rawValue.lowercased() {
             self = platform
