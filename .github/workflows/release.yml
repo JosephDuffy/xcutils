@@ -64,30 +64,3 @@ jobs:
           asset_path: ./xcutils.zip
           asset_name: xcutils.zip
           asset_content_type: application/zip
-
-  build_docs:
-    name: Build Docs
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        xcode:
-          - "14.1"
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.125.0
-        with:
-          bundler-cache: true
-
-      - name: Build docs
-        run: bundle exec jazzy
-
-      - name: Upload Docs
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs
