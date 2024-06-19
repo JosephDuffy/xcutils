@@ -5,15 +5,15 @@ on: [push]
 jobs:
   tests:
     name: Tests
-    runs-on: macos-latest
+    runs-on: macos-14
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - "13.4.1"
-          - "14.1"
+          - "15.1"
+          - "15.4"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Select Xcode ${{ matrix.xcode }}
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
@@ -25,6 +25,7 @@ jobs:
         run: xcrun llvm-cov export -format="lcov" .build/debug/xcutilsPackageTests.xctest/Contents/MacOS/xcutilsPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage.lcov
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
