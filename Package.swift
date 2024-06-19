@@ -1,9 +1,9 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
     name: "xcutils",
-    platforms: [.macOS(.v10_13)],
+    platforms: [.macOS(.v13)],
     products: [
         .executable(name: "xcutils", targets: ["xcutils"]),
         .library(name: "AppArchiver", targets: ["AppArchiver"]),
@@ -18,7 +18,7 @@ let package = Package(
         .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1")
     ],
     targets: [
-        .target(name: "xcutils", dependencies: ["XcutilsCommand"]),
+        .executableTarget(name: "xcutils", dependencies: ["XcutilsCommand"]),
 
         .target(
             name: "XcutilsCommand",
