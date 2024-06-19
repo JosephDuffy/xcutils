@@ -22,5 +22,5 @@ public enum Platform: String, RawRepresentable, ExpressibleByArgument, CaseItera
 
         return nil
     }
-    
+
 }

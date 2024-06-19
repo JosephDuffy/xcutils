@@ -13,7 +13,7 @@ public final class TestRunner {
      - parameter platform: The platform to test.
      - parameter versionSpecifier: The version of the platform to test.
      - parameter project: The path of the project. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
-     - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.     
+     - parameter workspace: The path of the workfspace. Can be `nil` if inside a directory with an Xcode project, Xcode workspace, or a swift package.
      - parameter scheme: The scheme to test. For swift packages this is the target.
      */
     public static func runTests(
@@ -27,7 +27,7 @@ public final class TestRunner {
         enableVerboseLogging: Bool = false
     ) throws {
         let destination: String
-        
+
         switch platform {
         case .macOS:
             destination = "platform=macOS"
@@ -77,7 +77,7 @@ public final class TestRunner {
                     destination = "id=\(simulator.udid.uuidString)"
                 } else {
                     printError("Found no simulators with platform \(platform), version \(versionSpecifier), and name \(simulatorName)")
-                    
+
                     exit(1)
                 }
             } else {
@@ -109,10 +109,10 @@ public final class TestRunner {
             command.append("-enableCodeCoverage")
             command.append(enableCodeCoverage ? "YES" : "NO")
         }
-        
+
         try run(enableVerboseLogging: enableVerboseLogging, command, streamOutputTo: .standardOut)
     }
-    
+
 }
 
 private struct RuntimesOutput: Codable {
